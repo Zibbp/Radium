@@ -1,4 +1,4 @@
-name: Docker Image
+name: Radium Docker Image
 
 on:
   push:
