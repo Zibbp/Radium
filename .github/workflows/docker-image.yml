@@ -1,0 +1,55 @@
+name: Docker Image
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag radium:$(date +%s)
+      - name: Read Properties
+        id: read_property
+        uses: christian-draeger/read-properties@1.0.1
+        with:
+          path: "./VERSION"
+          property: "version"
+      - name: Current version
+        run: echo ${{ steps.read_property.outputs.value }}
+      - name: Bump release version
+        id: bump_version
+        uses: christian-draeger/increment-semantic-version@1.0.2
+        with:
+          current-version: ${{ steps.read_property.outputs.value }}
+          version-fragment: "bug"
+      - name: New version
+        run: echo ${{ steps.bump_version.outputs.next-version }}
+      - name: Remove existing version file
+        uses: JesseTG/rm@v1.0.0
+        with:
+          path: "./VERSION"
+      - name: Write new version
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: "./VERSION"
+          property: "version"
+          value: ${{ steps.bump_version.outputs.next-version }}
+      - name: Publish to Docker Hub
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: zibbp/radium
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          dockerfile: ./Dockerfile
+          context: "."
+          tags: "latest,${{ steps.bump_version.outputs.next-version }}"
+      - name: Commit bumped version
+        uses: stefanzweifel/git-auto-commit-action@v4.4.0
+        with:
+          commit_message: "Updated version to ${{ steps.bump_version.outputs.next-version }}"
