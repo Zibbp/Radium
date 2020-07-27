@@ -3,11 +3,14 @@ module.exports = {
     HLS_URL:
       process.env.HLS_URL ||
       "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-    BASE_URL: process.env.BACKEND_URL || "http://localhost:3000",
+    BASE_URL: process.env.BASE_URL || "http://localhost:3000",
     ADMIN_TOKEN: process.env.ADMIN_TOKEN
   },
   privateRuntimeConfig: {
     ADMIN_TOKEN: process.env.ADMIN_TOKEN
+  },
+  env: {
+    BASE_URL: process.env.BASE_URL || "http://localhost:3000"
   },
   mode: "universal",
   /*
