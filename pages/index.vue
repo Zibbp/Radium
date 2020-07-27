@@ -25,7 +25,17 @@ import Player from "../components/Player";
 // import Buttons from "../components/Buttons";
 import Chat from "../components/Chat";
 export default {
-  components: { Chat, Player }
+  components: { Chat, Player },
+  async mounted() {
+    const emotes = await this.$axios.get(
+      `${this.$config.BASE_URL}/api/getEmotes`
+    );
+    this.$store.commit("setEmotes", emotes.data);
+    const emoteList = await this.$axios.get(
+      `${this.$config.BASE_URL}/api/getEmoteList`
+    );
+    this.$store.commit("setEmoteList", emoteList.data);
+  }
 };
 </script>
 

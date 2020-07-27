@@ -5,12 +5,10 @@ module.exports = {
       "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
     BASE_URL: process.env.BASE_URL || "http://localhost:3000",
     ADMIN_TOKEN: process.env.ADMIN_TOKEN
+    // TEST_MSG: process.env.TEST_MSG
   },
   privateRuntimeConfig: {
     ADMIN_TOKEN: process.env.ADMIN_TOKEN
-  },
-  env: {
-    BASE_URL: process.env.BASE_URL || "http://localhost:3000"
   },
   mode: "universal",
   /*

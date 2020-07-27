@@ -5,22 +5,6 @@
         <img src="/rg2.png" alt="Radium" class="radium-logo" />
       </b-navbar-item>
     </template>
-    <template slot="start">
-      <b-navbar-item href="#">
-        Link
-      </b-navbar-item>
-      <b-navbar-item href="#">
-        Another Link
-      </b-navbar-item>
-      <b-navbar-dropdown label="Dropdown">
-        <b-navbar-item href="#">
-          About
-        </b-navbar-item>
-        <b-navbar-item href="#">
-          Contact
-        </b-navbar-item>
-      </b-navbar-dropdown>
-    </template>
 
     <template slot="end">
       <b-navbar-item tag="div">

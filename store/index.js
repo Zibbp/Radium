@@ -6,7 +6,10 @@ export const state = () => ({
     username: null,
     color: null,
     isAdmin: null
-  }
+  },
+  env: {},
+  emotes: null,
+  emoteList: null
 });
 
 const colors = [
@@ -76,5 +79,24 @@ export const mutations = {
   },
   isAdmin(state) {
     state.user.isAdmin = true;
+  },
+  setEnv(state, env) {
+    state.env = env;
+  },
+  setEmotes(state, emotes) {
+    state.emotes = emotes;
+  },
+  setEmoteList(state, emoteList) {
+    state.emoteList = emoteList;
+  }
+};
+
+export const actions = {
+  nuxtServerInit({ commit }) {
+    if (process.server) {
+      commit("setEnv", {
+        BASE_URL: process.env.BASE_URL
+      });
+    }
   }
 };

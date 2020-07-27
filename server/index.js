@@ -4,6 +4,7 @@ const { Nuxt, Builder } = require("nuxt");
 const socket = require("socket.io");
 const crypto = require("crypto");
 const cors = require("cors");
+const fs = require("fs");
 const app = express();
 
 app.use(cors());
@@ -27,6 +28,8 @@ async function start() {
     await builder.build();
   }
 
+  console.log("printing test message");
+
   if (nuxt.options.privateRuntimeConfig.ADMIN_TOKEN) {
     var adminToken = nuxt.options.privateRuntimeConfig.ADMIN_TOKEN;
     console.log(`Admin token: ${adminToken}`);
@@ -35,11 +38,11 @@ async function start() {
     console.log(`Admin token: ${adminToken}`);
   }
 
-  app.get("/api", (req, res) => {
+  app.get("/api", (req, res, next) => {
     res.status(200).json({ success: true });
   });
 
-  app.post("/auth", (req, res) => {
+  app.post("/auth", (req, res, next) => {
     try {
       if (req.body.code === adminToken) {
         res.status(200).json({ auth: true });
@@ -48,6 +51,52 @@ async function start() {
       }
     } catch (err) {
       res.status(500).json({ err });
+    }
+  });
+
+  app.get("/api/getEmotes", (req, res, next) => {
+    console.log("get emotes");
+    try {
+      const emoteFolder = "./static/emotes/";
+      fs.readdir(emoteFolder, (err, files) => {
+        var emotes = {};
+        files.forEach(file => {
+          var emote = file.replace(/(.*)\.[^.]+$/, "$1");
+          emotes[emote] = `<img src=/emotes/${file}>`;
+        });
+
+        res.status(200).json(emotes);
+        if (err) {
+          throw new Error(err);
+        }
+      });
+    } catch (error) {
+      res.status(500).json({ error });
+    }
+  });
+
+  app.get("/api/getEmoteList", (req, res, next) => {
+    try {
+      const emoteFolder = "./static/emotes/";
+      fs.readdir(emoteFolder, (err, files) => {
+        var emotes = [];
+
+        files.forEach(file => {
+          var emote = file.replace(/(.*)\.[^.]+$/, "$1");
+
+          let path = `<img src=/emotes/${file}>`;
+
+          var obj = { name: emote, emote: path };
+
+          emotes.push(obj);
+        });
+        res.status(200).json(emotes);
+        if (err) {
+          throw new Error(err);
+        }
+      });
+    } catch (error) {
+      res.status(500).json({ error });
     }
   });
 
@@ -68,6 +117,7 @@ async function start() {
   const connections = [];
 
   io.on("connection", socket => {
+    console.log("new con");
     connections.push(socket);
 
     socket.on("newUser", user => {

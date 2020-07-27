@@ -1,7 +1,7 @@
 <template>
   <vue-plyr ref="plyr" :options="playerOptions">
     <video
-      poster="/movie_night_poster.png"
+      poster="/radium_poster.png"
       data-plyr-config="{'autoplay': true}"
     ></video>
   </vue-plyr>
