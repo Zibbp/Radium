@@ -28,8 +28,6 @@ async function start() {
     await builder.build();
   }
 
-  console.log("printing test message");
-
   if (nuxt.options.privateRuntimeConfig.ADMIN_TOKEN) {
     var adminToken = nuxt.options.privateRuntimeConfig.ADMIN_TOKEN;
     console.log(`Admin token: ${adminToken}`);
@@ -55,7 +53,6 @@ async function start() {
   });
 
   app.get("/api/getEmotes", (req, res, next) => {
-    console.log("get emotes");
     try {
       const emoteFolder = "./static/emotes/";
       fs.readdir(emoteFolder, (err, files) => {
@@ -117,11 +114,11 @@ async function start() {
   const connections = [];
 
   io.on("connection", socket => {
-    console.log("new con");
     connections.push(socket);
-
+    console.log("new connection");
     socket.on("newUser", user => {
       users.push(user);
+      console.log(`${user.username} has joined`);
     });
 
     socket.on("play", () => {
@@ -146,10 +143,6 @@ async function start() {
       } else {
         io.emit("incorrectAdmin");
       }
-    });
-
-    socket.on("testDemo", () => {
-      console.log("pogchamp");
     });
   });
 }

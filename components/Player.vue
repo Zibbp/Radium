@@ -1,14 +1,18 @@
 <template>
   <vue-plyr ref="plyr" :options="playerOptions">
-    <video
-      poster="/radium_poster.png"
-      data-plyr-config="{'autoplay': true}"
-    ></video>
+    <video poster="/radium_poster.png" data-plyr-config="{'autoplay': true}">
+      <track
+        kind="captions"
+        label="English"
+        srclang="en"
+        src="/subs.vtt"
+        default
+      />
+    </video>
   </vue-plyr>
 </template>
 
 <script>
-import socket from "~/plugins/socket.io";
 import Hls from "hls.js";
 export default {
   data() {
@@ -26,7 +30,7 @@ export default {
           "settings",
           "fullscreen"
         ],
-        settings: ["quality", "loop"]
+        settings: ["quality", "loop", "captions"]
       },
       testString: "yodude"
     };
@@ -37,6 +41,9 @@ export default {
     }
   },
   mounted() {
+    this.mainSocket = this.$nuxtSocket({
+      persist: "mainSocket"
+    });
     // HLS
     if (Hls.isSupported()) {
       const hls = new Hls();
@@ -47,10 +54,10 @@ export default {
     }
     // Nuxt bus to sync
     this.$nuxt.$on("sync", () => {
-      socket.emit("sync", this.player.currentTime);
+      this.mainSocket.emit("sync", this.player.currentTime);
     });
     // On play from server
-    socket.on("sendPlay", () => {
+    this.mainSocket.on("sendPlay", () => {
       this.player.play();
       this.$buefy.toast.open({
         duration: 1000,
@@ -59,7 +66,7 @@ export default {
       });
     });
     // On pause from server
-    socket.on("sendPause", () => {
+    this.mainSocket.on("sendPause", () => {
       this.player.pause();
       this.$buefy.toast.open({
         duration: 1000,
@@ -68,7 +75,7 @@ export default {
       });
     });
     // On sync from server
-    socket.on("sendSync", currentTime => {
+    this.mainSocket.on("sendSync", currentTime => {
       this.player.currentTime = currentTime;
       this.$buefy.toast.open({
         duration: 1000,

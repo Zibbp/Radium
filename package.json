@@ -19,6 +19,7 @@
     "node-sass": "^4.14.1",
     "nuxt": "^2.0.0",
     "nuxt-buefy": "^0.3.2",
+    "nuxt-socket-io": "^1.1.5",
     "plyr": "^3.6.2",
     "sass-loader": "^9.0.2",
     "socket.io": "^2.3.0",

@@ -4,8 +4,17 @@ module.exports = {
       process.env.HLS_URL ||
       "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
     BASE_URL: process.env.BASE_URL || "http://localhost:3000",
-    ADMIN_TOKEN: process.env.ADMIN_TOKEN
-    // TEST_MSG: process.env.TEST_MSG
+    ADMIN_TOKEN: process.env.ADMIN_TOKEN,
+    io: {
+      // will be available in this.$config.io
+      sockets: [
+        {
+          name: "main",
+          url: process.env.BASE_URL || "http://localhost:3000",
+          default: true
+        }
+      ]
+    }
   },
   privateRuntimeConfig: {
     ADMIN_TOKEN: process.env.ADMIN_TOKEN
@@ -50,8 +59,18 @@ module.exports = {
     // Doc: https://buefy.github.io/#/documentation
     "nuxt-buefy",
     // Doc: https://axios.nuxtjs.org/usage
-    "@nuxtjs/axios"
+    "@nuxtjs/axios",
+    "nuxt-socket-io"
   ],
+  io: {
+    sockets: [
+      {
+        name: "config",
+        url: "http://localhost:3000",
+        default: false
+      }
+    ]
+  },
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options

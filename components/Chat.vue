@@ -54,7 +54,6 @@
 </template>
 
 <script>
-import socket from "~/plugins/socket.io";
 import Emotes from "./Emotes";
 export default {
   components: { Emotes },
@@ -66,7 +65,10 @@ export default {
     };
   },
   mounted() {
-    socket.on("newMessage", message => {
+    this.mainSocket = this.$nuxtSocket({
+      persist: "mainSocket"
+    });
+    this.mainSocket.on("newMessage", message => {
       this.chat.push(message);
       this.$nextTick(() => {
         this.setScrollToEnd();
@@ -124,7 +126,7 @@ export default {
           message: result,
           user: this.$store.state.user
         };
-        socket.emit("message", message);
+        this.mainSocket.emit("message", message);
         this.message = "";
       }
     }

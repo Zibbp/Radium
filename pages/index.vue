@@ -22,7 +22,6 @@
 
 <script>
 import Player from "../components/Player";
-// import Buttons from "../components/Buttons";
 import Chat from "../components/Chat";
 export default {
   components: { Chat, Player },

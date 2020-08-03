@@ -51,28 +51,27 @@
 </template>
 
 <script>
-import socket from "~/plugins/socket.io";
-
 export default {
+  mounted() {
+    this.mainSocket = this.$nuxtSocket({
+      persist: "mainSocket"
+    });
+  },
   methods: {
     toggleChat: function() {
       this.$store.commit("toggleChat");
     },
-    dumpUser: function() {
-      console.log(this.$store.state.user);
-    },
     play() {
-      socket.emit("play");
+      this.mainSocket.emit("play");
     },
     pause() {
-      socket.emit("pause");
+      this.mainSocket.emit("pause");
     },
     sync() {
       $nuxt.$emit("sync");
     }
   },
-  computed: {},
-  mounted() {}
+  computed: {}
 };
 </script>
 
