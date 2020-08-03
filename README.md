@@ -8,11 +8,11 @@
 <h4 align="center">🚨 Alpha - Things will break and may not work</h4>
 
 <p align="center">
-  <a href="https://github.com/Zibbp/Radium">
+  Radium<a href="https://github.com/Zibbp/Radium">
     <img src="https://github.com/Zibbp/Radium/workflows/Build/badge.svg?branch=master"
          alt="Docker Image">
   </a>
-  <a href="https://github.com/Zibbp/Nginx-RTMP"><img src="https://github.com/Zibbp/Nginx-RTMP/workflows/Nginx%20Docker%20Image/badge.svg"></a>
+  Nginx-RTMP-HLS <a href="https://github.com/Zibbp/Nginx-RTMP-HLS"><img src="https://github.com/Zibbp/Nginx-RTMP-HLS/workflows/Build/badge.svg"></a>
 </p>
 
 ![screenshot](https://i.imgur.com/qW0onMq.png)
