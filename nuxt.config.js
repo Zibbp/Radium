@@ -11,10 +11,10 @@ export default {
         {
           name: "main",
           url: process.env.BASE_URL || "http://localhost:3000",
-          default: true
-        }
-      ]
-    }
+          default: true,
+        },
+      ],
+    },
   },
   /*
    ** Nuxt rendering mode
@@ -38,10 +38,10 @@ export default {
       {
         hid: "description",
         name: "description",
-        content: process.env.npm_package_description || ""
-      }
+        content: process.env.npm_package_description || "",
+      },
     ],
-    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
+    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
   },
   /*
    ** Global CSS
@@ -71,10 +71,10 @@ export default {
     "@nuxtjs/axios",
     "@nuxt/http",
     "~/io",
-    "nuxt-socket-io"
+    "nuxt-socket-io",
   ],
   io: {
-    sockets: [{ name: "config", url: "http://localhost:3000", default: false }]
+    sockets: [{ name: "config", url: "http://localhost:3000", default: false }],
   },
   /*
    ** Axios module configuration
@@ -85,12 +85,12 @@ export default {
    ** Server Middleware
    */
   serverMiddleware: {
-    "/api": "~/api"
+    "/api": "~/api",
   },
   /*
    ** Build configuration
    ** See https://nuxtjs.org/api/configuration-build/
    */
   build: {},
-  telemetry: false
+  telemetry: false,
 };

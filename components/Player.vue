@@ -22,31 +22,31 @@ export default {
           "pip",
           "volume",
           "settings",
-          "fullscreen"
+          "fullscreen",
         ],
-        settings: ["quality", "loop"]
-      }
+        settings: ["quality", "loop"],
+      },
     };
   },
   computed: {
     player() {
       return this.$refs.plyr.player;
-    }
+    },
   },
   mounted() {
     // Create socket connection
     mainSocket = this.$nuxtSocket({
-      persist: "mainSocket"
+      persist: "mainSocket",
     });
     // HLS
     if (Hls.isSupported()) {
       const hls = new Hls();
-      hls.loadSource("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8");
+      hls.loadSource(this.$config.HLS_URL);
       hls.attachMedia(this.player.media);
       window.hls = hls;
     }
     // change HLS stream
-    mainSocket.on("setStream", url => {
+    mainSocket.on("setStream", (url) => {
       const hls = new Hls();
       hls.loadSource(url);
       hls.attachMedia(this.player.media);
@@ -62,7 +62,7 @@ export default {
       this.$buefy.toast.open({
         duration: 500,
         message: `Play`,
-        position: "is-bottom"
+        position: "is-bottom",
       });
     });
     // on sendPause from server
@@ -71,20 +71,20 @@ export default {
       this.$buefy.toast.open({
         duration: 500,
         message: `Pause`,
-        position: "is-bottom"
+        position: "is-bottom",
       });
     });
     // on sendSync from server
-    mainSocket.on("sendSync", currentTime => {
+    mainSocket.on("sendSync", (currentTime) => {
       this.player.currentTime = currentTime;
       this.$buefy.toast.open({
         duration: 500,
         message: `Syncing`,
-        position: "is-bottom"
+        position: "is-bottom",
       });
     });
   },
-  created() {}
+  created() {},
 };
 </script>
 
