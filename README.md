@@ -14,7 +14,7 @@
   <a href="https://github.com/Zibbp/Nginx-RTMP"><img src="https://github.com/Zibbp/Nginx-RTMP/workflows/Nginx%20Docker%20Image/badge.svg"></a>
 </p>
 
-![screenshot](https://i.imgur.com/ywWYOaQ.jpeg)
+![screenshot](https://i.imgur.com/qW0onMq.png)
 
 ## Features
 
@@ -22,9 +22,9 @@
   - RTMP to HLS stream with VOD capabilities
   - Direct HLS playback
 - Controls
-  - Play and Pause buttons are synced between clients
+  - Play, pause, and sync all members in the room
 - Sync Room
-  - Sync button gets clients time and pushes to others\*
+  - Sync button pushes users time to all clients\*
 - Chat
   - No login, simply enter a displayname
   - Custom emotes from images
@@ -35,27 +35,18 @@
 
 ## Getting Started
 
-Radium runs in a Docker container allowing easy deployment and updating, simply modify and run the docker command.
+### Basic usage
+
+Radium runs in a Docker container, simply modify and run the docker command.
 
 ```bash
 # Basic Docker Container
-$ docker run -d --name=radium -p 3000:3000 zibbp/radium:latest
+$ docker run -d --name=radium -p 3000:3000 -e BASE_URL=https://radium.example.com zibbp/radium:latest
 ```
 
 ### Options
 
-##### HLS
-
-To change the HLS url pass the environment variable `HLS_URL` through.
-
-```bash
-# Add the following environment variable
--e HLS_URL=https://domain.com/stream.m3u8
-```
-
-_If the `HLS_URL` variable is not passed through, a default demo file will play._
-
-##### Base URL
+##### Base URL _(REQUIRED)_
 
 The base url is required for basic functionality.
 
@@ -63,6 +54,17 @@ The base url is required for basic functionality.
 # Add the following environment variable
 -e BASE_URL=https://radium.example.com
 ```
+
+##### HLS
+
+The HLS url can be changed via an environment variable or within the application when running. To set a permanent url, pass the environment variable `HLS_URL` through.
+
+```bash
+# Add the following environment variable
+-e HLS_URL=https://domain.com/stream.m3u8
+```
+
+_If the `HLS_URL` variable is not passed through, a default demo file will play._
 
 ##### Admin Token
 
@@ -73,10 +75,10 @@ The admin token is automatically generated and logged to the console whenever st
 -e ADMIN_TOKEN=secret123
 ```
 
-## Usage & Documentation
+## Documentation
 
 Coming Soon
 <br> <br>
 
-> [zibbp.tech](https://zibbp.tech)
-> GitHub [@zibbp](https://github.com/zibbp)
+> [zibbp.tech](https://zibbp.tech) &nbsp;&middot;&nbsp;
+> GitHub [@zibbp](https://github.com/zibbp) &nbsp;&middot;&nbsp;

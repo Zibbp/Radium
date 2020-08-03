@@ -7,52 +7,22 @@
 
 <script>
 import Navbar from "../components/Navbar";
-export default {
-  components: { Navbar },
-  data() {
-    return {
-      user: {
-        username: "",
-        color: "",
-        isAdmin: false
-      }
-    };
-  },
-  mounted() {
-    if (!this.$store.state.connected) {
-      this.prompt();
-    }
-  },
-  methods: {
-    prompt() {
-      this.$buefy.dialog.prompt({
-        message: `Enter a username`,
-        inputAttrs: {
-          maxlength: 12
-        },
-        confirmText: "Enter",
-        trapFocus: true,
-        onConfirm: value => {
-          this.user.username = value;
-          this.setUser();
-        },
-        canCancel: false
-      });
-    },
-    setUser() {
-      this.$store.commit("setUser", this.user);
-    }
-  }
-};
+export default {};
 </script>
 
-<style lang="scss">
-html::-webkit-scrollbar {
-  display: none;
+<style>
+body::-webkit-scrollbar {
+  width: 10px;
+  background-color: #555555;
 }
-html {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+body::-webkit-scrollbar-track {
+  background-color: #555555;
 }
-$input-placeholder-color: #fff;
+body::-webkit-scrollbar-thumb {
+  background-color: #000000;
+  border: 0px solid #555555;
+}
+* {
+  scrollbar-color: #000000 #555555;
+}
 </style>

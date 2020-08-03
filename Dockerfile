@@ -1,12 +1,14 @@
 FROM mhart/alpine-node:12
 
 # create destination directory
-RUN mkdir -p /usr/src/radium
-WORKDIR /usr/src/radium
+WORKDIR /opt/app
+
+COPY package.json package-lock.json* ./
 
 # copy the app, note .dockerignore
-COPY . /usr/src/radium/
 RUN npm install
+
+COPY . /opt/app
 
 # build
 RUN npm run build

@@ -1,72 +1,56 @@
 <template>
-  <div class="has-background-black-ter chat-panel">
-    <!-- messages panel -->
+  <div class="chat-panel">
     <div class="message-panel" id="message-panel">
-      <div class="chat-message" v-for="item in chat" :key="item.message">
-        <img
-          v-if="item.user.isAdmin"
-          src="/admin.png"
-          class="admin-badge"
-          alt="admin"
-        />
-        <strong :style="{ color: item.user.color }"
-          >{{ item.user.username }}:&nbsp;</strong
+      <div class="messages" v-for="item in chat" :key="item.id">
+        <b-icon
+          v-if="item.user.admin"
+          icon="cog"
+          size="is-small"
+          class="admin-icon"
+          type="is-light"
         >
-        <div v-html="item.message" />
+        </b-icon
+        ><span :style="{ color: item.user.color }" class="has-text-weight-bold"
+          >{{ item.user.username }} </span
+        ><span>:&nbsp;</span>
+        <div class="html-message" v-html="item.message" />
       </div>
     </div>
-    <!-- input panel -->
     <div class="input-panel">
-      <form>
-        <div class="control">
-          <input
-            class="input message-input has-text-white"
-            v-model="message"
-            type="text"
-            placeholder="Send a message"
-          />
-        </div>
-        <div class="control">
-          <!-- <button
-            v-if="this.$store.state.user.isAdmin"
-            class="button is-black is-pulled-left"
-          >
-            Admin
-          </button> -->
-          <button
-            @click.prevent="sendMessage"
-            class="button is-success is-outlined is-pulled-right"
-          >
-            Chat
-          </button>
-        </div>
+      <form class="input-form">
+        <input class="input is-dark" v-model="message" type="text" />
+        <button class="button is-dark" @click.prevent="sendMessage">
+          Chat
+        </button>
       </form>
     </div>
-    <b-modal
-      :active.sync="isComponentModalActive"
-      :destroy-on-hide="true"
-      aria-role="dialog"
-      aria-modal
-    >
-      <Emotes></Emotes>
+    <b-modal :active.sync="helpModal" :destroy-on-hide="true" scroll="keep">
+      <Help />
+    </b-modal>
+    <b-modal :active.sync="emoteModal" :destroy-on-hide="true" scroll="keep">
+      <Emotes />
     </b-modal>
   </div>
 </template>
 
 <script>
-import socket from "~/plugins/socket.io";
+import Help from "./Help";
 import Emotes from "./Emotes";
+var mainSocket = null;
 export default {
-  components: { Emotes },
   data() {
     return {
-      isComponentModalActive: false,
       chat: [],
-      message: ""
+      message: "",
+      helpModal: false,
+      emoteModal: false
     };
   },
   mounted() {
-    socket.on("newMessage", message => {
+    mainSocket = this.$nuxtSocket({
+      persist: "mainSocket"
+    });
+    mainSocket.on("sendMessage", message => {
       this.chat.push(message);
       this.$nextTick(() => {
         this.setScrollToEnd();
@@ -79,109 +63,119 @@ export default {
       element.scrollTop = element.offsetHeight + element.scrollHeight;
     },
     async sendMessage() {
-      if (this.message == "/help") {
-        this.message = "/auth<br>/emotes";
-        this.message = "";
-      } else if (this.message == "/emotes") {
-        this.isComponentModalActive = true;
-        this.message = "";
-      } else if (this.message.substring(0, 5) == "/auth") {
-        var code = this.message.substring(6);
-        try {
-          var res = await this.$axios.post(`${this.$config.BASE_URL}/auth`, {
-            code
-          });
-          this.$buefy.toast.open({
-            duration: 1000,
-            message: `Authenticated`,
-            position: "is-bottom",
-            type: "is-success"
-          });
-          this.$store.commit("isAdmin");
-        } catch (error) {
-          console.log(error);
-          this.$buefy.toast.open({
-            duration: 1000,
-            message: `Incorrect Code`,
-            position: "is-bottom",
-            type: "is-danger"
-          });
-        }
-
-        this.message = "";
-      } else if (this.message == "") {
-        this.message = "";
-      } else {
-        const stringArr = this.message.split(" ");
-        const result = stringArr
-          .map(word =>
-            this.$store.state.emotes[word]
-              ? this.$store.state.emotes[word]
-              : word
-          )
-          .join(" ");
-        var message = {
-          message: result,
-          user: this.$store.state.user
-        };
-        socket.emit("message", message);
-        this.message = "";
+      // parse message for commands and emotes
+      switch (this.message) {
+        case "":
+          this.message = "";
+          break;
+        case "/help":
+          this.helpModal = true;
+          this.message = "";
+          break;
+        case "/emotes":
+          this.emoteModal = true;
+          this.message = "";
+          break;
+        default:
+          if (this.message.substring(0, 5) == "/auth") {
+            var code = this.message.substring(6);
+            try {
+              var res = await this.$axios.get(
+                `${this.$config.BASE_URL}/api/auth/${code}`
+              );
+              this.$buefy.toast.open({
+                duration: 1000,
+                message: `Authenticated`,
+                position: "is-top",
+                type: "is-success"
+              });
+              this.$store.commit("isAdmin");
+              this.message = "";
+            } catch (error) {
+              this.$buefy.toast.open({
+                duration: 1000,
+                message: `Incorrect Code`,
+                position: "is-top",
+                type: "is-danger"
+              });
+              this.message = "";
+            }
+          } else {
+            const stringArr = this.message.split(" ");
+            const result = stringArr
+              .map(word =>
+                this.$store.state.emotes[word]
+                  ? this.$store.state.emotes[word]
+                  : word
+              )
+              .join(" ");
+            var message = {
+              message: result,
+              user: this.$store.state.user
+            };
+            mainSocket.emit("message", message);
+            this.message = "";
+          }
       }
     }
   }
 };
 </script>
 
-<style lang="scss">
-.input-panel {
-  /* display: flex; */
-  width: 16.6vw;
-  bottom: 0;
-  position: absolute;
+<style>
+.chat-panel {
+  height: calc(100vh - 3.25rem);
 }
 .message-panel {
-  height: 92%;
-  overflow: scroll;
-  padding: 0.5rem;
+  height: 95%;
+  background-color: #252525;
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 .message-panel::-webkit-scrollbar {
   display: none;
 }
-.message-panel {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+.input-panel {
+  height: 5%;
+  background-color: #252525;
+}
+.input-form {
+  display: flex;
+  height: 100%;
+}
+.input-form .input {
+  border-radius: 0px;
+  background-color: #414141;
+  border-color: #414141;
+  color: hsl(0, 0%, 86%);
+}
+.input-form .button {
+  border-radius: 0px;
 }
 
-.chat-panel {
-  max-height: 94vh;
-  height: 94vh;
-}
-.chat-input {
-  width: 75%;
-}
-.chat-button {
-  width: 25%;
-}
-.message-input {
-  background-color: hsl(0, 0%, 4%);
-  border-color: #1b1c25;
-}
-.chat-message {
+.messages {
   color: #d3d3d3;
   display: flex;
+  padding-left: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-right: 0.5rem;
 }
-.admin-badge {
-  height: 18px;
-  width: 18px;
-  margin-top: 3px;
-  margin-right: 5px;
+.html-message {
+  word-break: break-word;
 }
-.input:hover {
-  border-color: hsl(141, 71%, 48%);
+.admin-icon {
+  margin-top: 0.25rem;
+  margin-right: 0.2rem;
 }
-.input:active {
-  border-color: hsl(141, 71%, 48%) !important;
-  color: hsl(141, 71%, 48%) !important;
+
+@media screen and (min-width: 992px) {
+  .input-form .input {
+    height: 100%;
+  }
+  .input-form .button {
+    height: 100%;
+  }
 }
 </style>

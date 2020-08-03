@@ -1,49 +1,56 @@
 <template>
-  <b-navbar class="is-black">
+  <b-navbar type="is-dark" class="radium-navbar">
     <template slot="brand">
       <b-navbar-item tag="router-link" :to="{ path: '/' }">
-        <img src="/rg2.png" alt="Radium" class="radium-logo" />
+        <img src="/logo.png" alt="Radium" />
+      </b-navbar-item>
+    </template>
+    <template slot="start">
+      <b-navbar-item href="https://github.com/zibbp/radium" target="_blank">
+        Github
       </b-navbar-item>
     </template>
 
     <template slot="end">
       <b-navbar-item tag="div">
         <div class="buttons">
-          <b-button @click="play" type="is-success" outlined
-            ><b-icon icon="play" size="is-small"> </b-icon
-          ></b-button>
-          <b-button @click="pause" type="is-success" outlined
-            ><b-icon icon="pause" size="is-small"> </b-icon
-          ></b-button>
-          <b-button
-            v-if="this.$store.state.user.isAdmin"
-            type="is-success"
+          <button class="button is-dark" @click="play">
+            <b-icon icon="play"></b-icon>
+          </button>
+          <button class="button is-dark" @click="pause">
+            <b-icon icon="pause"></b-icon>
+          </button>
+          <button
+            v-if="$store.state.user.admin"
+            class="button is-dark"
             @click="sync"
-            outlined
-            ><b-icon icon="sync" size="is-small"> </b-icon
-          ></b-button>
+          >
+            <b-icon icon="sync"></b-icon>
+          </button>
           <b-tooltip
             v-else
-            label="Only admins can sync"
-            position="is-bottom"
+            label="Only admins can sync the room"
             type="is-dark"
+            position="is-left"
             class="sync-tooltip"
-            animated
           >
-            <b-button type="is-success" outlined disabled
-              ><b-icon icon="sync" size="is-small"> </b-icon
-            ></b-button>
+            <button class="button is-dark" disabled>
+              <b-icon icon="sync"></b-icon>
+            </button>
           </b-tooltip>
-          <b-button
+          <button
             v-if="this.$store.state.chat"
+            class="button is-dark"
             @click="toggleChat"
-            type="is-success"
-            outlined
-            ><b-icon icon="arrow-collapse-right" size="is-small"> </b-icon
-          ></b-button>
-          <b-button v-else @click="toggleChat" type="is-success" outlined
-            ><b-icon icon="arrow-collapse-left" size="is-small"> </b-icon
-          ></b-button>
+          >
+            <b-icon icon="arrow-collapse-right"></b-icon>
+          </button>
+          <button v-else class="button is-dark" @click="toggleChat">
+            <b-icon icon="arrow-collapse-left"></b-icon>
+          </button>
+          <b-tag v-if="$store.state.user.admin" class="admin-tag" type="is-info"
+            >Admin</b-tag
+          >
         </div>
       </b-navbar-item>
     </template>
@@ -51,35 +58,34 @@
 </template>
 
 <script>
-import socket from "~/plugins/socket.io";
-
+var mainSocket = null;
 export default {
+  mounted() {
+    mainSocket = this.$nuxtSocket({
+      persist: "mainSocket"
+    });
+  },
   methods: {
-    toggleChat: function() {
-      this.$store.commit("toggleChat");
-    },
-    dumpUser: function() {
-      console.log(this.$store.state.user);
-    },
     play() {
-      socket.emit("play");
+      mainSocket.emit("play");
     },
     pause() {
-      socket.emit("pause");
+      mainSocket.emit("pause");
     },
     sync() {
       $nuxt.$emit("sync");
+    },
+    toggleChat: function() {
+      this.$store.commit("toggleChat");
     }
-  },
-  computed: {},
-  mounted() {}
+  }
 };
 </script>
 
-<style lang="scss">
-.navbar {
-  height: 6vh !important;
-  min-height: 6vh !important;
+<style>
+.admin-tag {
+  margin-bottom: 0.5rem;
+  margin-right: 0.5rem;
 }
 .sync-tooltip {
   margin-right: 0.5rem;
