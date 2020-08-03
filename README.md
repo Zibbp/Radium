@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="https://github.com/Zibbp/Radium">
-    <img src="https://github.com/Zibbp/Radium/workflows/Radium%20Docker%20Image/badge.svg"
+    <img src="https://github.com/Zibbp/Radium/workflows/Build/badge.svg?branch=master"
          alt="Docker Image">
   </a>
   <a href="https://github.com/Zibbp/Nginx-RTMP"><img src="https://github.com/Zibbp/Nginx-RTMP/workflows/Nginx%20Docker%20Image/badge.svg"></a>
