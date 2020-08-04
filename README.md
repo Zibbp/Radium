@@ -5,7 +5,8 @@
   <br>
 </h1>
 
-<h4 align="center">🚨 Alpha - Things will break and may not work</h4>
+<h4 align="center">🖥️<a href="https://radium-demo.herokuapp.com" target="_blank">Demo</a><i> may take a minute to wake app</i></h4>
+<h5 align="center">🚨 Alpha - Things may not function properly</h5>
 
 <p align="center">
   Radium<a href="https://github.com/Zibbp/Radium">
