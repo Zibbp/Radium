@@ -1,5 +1,19 @@
 <template>
   <section>
+    <b-notification
+      v-if="firefox"
+      type="is-warning"
+      has-icon
+      aria-close-label="Close notification"
+      role="alert"
+    >
+      It appears you are using this site with Firefox. Features may be unstable
+      on Firefox.<br />
+      <b>Known Firefox issues:</b> Subtitles not functioning properly, Periodic
+      frame stutters in the video. <br />
+      If these issues occur, please switch browsers.
+    </b-notification>
+
     <b-collapse
       class="card has-background-dark advanced-controls"
       animation="slide"
@@ -18,39 +32,120 @@
       </div>
       <div class="card-content">
         <div class="content">
-          <form class="video-form">
-            <div v-if="$store.state.user.admin" class="field">
-              <label class="label controls-label">Change HLS Stream</label>
-              <input
-                class="input"
-                v-model="url"
-                type="text"
-                placeholder="https://website.com/video.m3u8"
-              />
-              <p v-if="urlError" class="help is-danger">
-                Enter a valid HLS stream (.m3u8)
-              </p>
-              <b-button type="is-primary" @click.prevent="changeStream"
-                >Change</b-button
-              >
+          <div class="columns is-desktop">
+            <div class="column">
+              <form class="video-form">
+                <div v-if="$store.state.user.admin" class="field">
+                  <label class="label controls-label">Change HLS Stream</label>
+                  <input
+                    class="input"
+                    v-model="url"
+                    type="text"
+                    placeholder="https://website.com/video.m3u8"
+                  />
+                  <p class="help has-text-light">HLS Url</p>
+                  <p v-if="urlError" class="help is-danger">
+                    Enter a valid HLS stream (.m3u8)
+                  </p>
+                  <b-button type="is-primary" @click.prevent="changeStream"
+                    >Change</b-button
+                  >
+                </div>
+                <div v-else class="field">
+                  <label class="label controls-label">Change HLS Stream</label>
+                  <input
+                    class="input"
+                    v-model="url"
+                    type="text"
+                    placeholder="https://website.com/video.m3u8"
+                    disabled
+                  />
+                  <p class="help has-text-light">HLS Url</p>
+                  <p v-if="urlError" class="help is-danger">
+                    Enter a valid HLS stream (.m3u8)
+                  </p>
+                  <b-button
+                    type="is-primary"
+                    @click.prevent="changeStream"
+                    disabled
+                    >Change</b-button
+                  >
+                </div>
+              </form>
             </div>
-            <div v-else class="field">
-              <label class="label controls-label">Change HLS Stream</label>
-              <input
-                class="input"
-                v-model="url"
-                type="text"
-                placeholder="https://website.com/video.m3u8"
-                disabled
-              />
-              <p v-if="urlError" class="help is-danger">
-                Enter a valid HLS stream (.m3u8)
-              </p>
-              <b-button type="is-primary" @click.prevent="changeStream" disabled
-                >Change</b-button
-              >
+            <div class="column">
+              <form class="captions-form">
+                <div v-if="$store.state.user.admin" class="field">
+                  <label class="label controls-label"
+                    >Change Subtitles -
+                    <a
+                      href="https://github.com/Zibbp/Radium/wiki/Subtitles"
+                      target="_blank"
+                      class="has-text-grey-light"
+                      >README</a
+                    ></label
+                  >
+                  <div class="field-body">
+                    <div class="field">
+                      <input
+                        class="input"
+                        v-model="subtitleName"
+                        type="text"
+                        placeholder="my_subs.vtt"
+                      />
+                      <p class="help has-text-light caption-help">
+                        Name of subtitle in folder
+                      </p>
+                    </div>
+                  </div>
+
+                  <p v-if="subtitleError" class="help is-danger">
+                    Enter the name of your subtitles from the subtitle folder
+                    (.vtt)
+                  </p>
+                  <b-button type="is-primary" @click.prevent="changeSubtitles"
+                    >Change</b-button
+                  >
+                </div>
+                <div v-else>
+                  <label class="label controls-label"
+                    >Change Subtitles -
+                    <a
+                      href="https://github.com/Zibbp/Radium/wiki/Subtitles"
+                      target="_blank"
+                      class="has-text-grey-light"
+                      >README</a
+                    ></label
+                  >
+                  <div class="field-body">
+                    <div class="field">
+                      <input
+                        class="input"
+                        v-model="subtitleName"
+                        type="text"
+                        placeholder="my_subs.vtt"
+                        disabled
+                      />
+                      <p class="help has-text-light caption-help">
+                        Name of subtitle in folder
+                      </p>
+                    </div>
+                  </div>
+
+                  <p v-if="subtitleError" class="help is-danger">
+                    Enter the name of your subtitles from the subtitle folder
+                    (.vtt)
+                  </p>
+                  <b-button
+                    type="is-primary"
+                    @click.prevent="changeSubtitles"
+                    disabled
+                    >Change</b-button
+                  >
+                </div>
+              </form>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </b-collapse>
@@ -62,6 +157,7 @@ var mainSocket = null;
 export default {
   data() {
     return {
+      firefox: null,
       url: "",
       urlError: false,
       isOpen: 1,
@@ -69,10 +165,13 @@ export default {
         {
           title: "Advanced Controls"
         }
-      ]
+      ],
+      subtitleName: "",
+      subtitleError: false
     };
   },
   mounted() {
+    this.firefox = typeof InstallTrigger !== "undefined";
     mainSocket = this.$nuxtSocket({
       persist: "mainSocket"
     });
@@ -91,6 +190,22 @@ export default {
         this.url = "";
         this.urlError = false;
       }
+    },
+    changeSubtitles() {
+      // Check if url is a valid (VTT)
+      if (this.subtitleName == "") {
+        this.subtitleName = "";
+        this.subtitleError = true;
+      } else if (
+        this.subtitleName.slice(this.subtitleName.length - 4) != ".vtt"
+      ) {
+        this.subtitleName = "";
+        this.subtitleError = true;
+      } else {
+        mainSocket.emit("changeSubtitles", this.subtitleName);
+        this.subtitleName = "";
+        this.subtitleError = false;
+      }
     }
   }
 };
@@ -102,5 +217,8 @@ export default {
 }
 .controls-label {
   color: hsl(0, 0%, 96%);
+}
+.caption-help {
+  margin-bottom: 1em;
 }
 </style>

@@ -48,6 +48,10 @@ export default function() {
       socket.on("message", message => {
         io.emit("sendMessage", message);
       });
+
+      socket.on("changeSubtitles", name => {
+        io.emit("setSubtitles", name);
+      });
     });
   });
 }
