@@ -1,6 +1,8 @@
 <template>
   <vue-plyr ref="plyr" class="player" :options="playerOptions">
-    <video poster="/radium_poster.png"></video>
+    <video poster="/radium_poster.png">
+      <track kind="captions" label="Track 1" :src="subtitleUrl" default />
+    </video>
   </vue-plyr>
 </template>
 
@@ -21,22 +23,24 @@ export default {
           "mute",
           "pip",
           "volume",
+          "captions",
           "settings",
-          "fullscreen",
+          "fullscreen"
         ],
-        settings: ["quality", "loop"],
+        settings: ["captions", "quality", "loop"]
       },
+      subtitleUrl: "http://localhost:3000/subs.vtt"
     };
   },
   computed: {
     player() {
       return this.$refs.plyr.player;
-    },
+    }
   },
   mounted() {
     // Create socket connection
     mainSocket = this.$nuxtSocket({
-      persist: "mainSocket",
+      persist: "mainSocket"
     });
     // HLS
     if (Hls.isSupported()) {
@@ -46,11 +50,17 @@ export default {
       window.hls = hls;
     }
     // change HLS stream
-    mainSocket.on("setStream", (url) => {
+    mainSocket.on("setStream", url => {
       const hls = new Hls();
       hls.loadSource(url);
       hls.attachMedia(this.player.media);
       window.hls = hls;
+    });
+    // change subtitles
+    mainSocket.on("setSubtitles", name => {
+      var subUrl = `${this.$config.BASE_URL}/subtitles/${name}`;
+      this.subtitleUrl = subUrl;
+      console.log(subUrl);
     });
     // Nuxt bus sync
     this.$nuxt.$on("sync", () => {
@@ -62,7 +72,7 @@ export default {
       this.$buefy.toast.open({
         duration: 500,
         message: `Play`,
-        position: "is-bottom",
+        position: "is-bottom"
       });
     });
     // on sendPause from server
@@ -71,20 +81,20 @@ export default {
       this.$buefy.toast.open({
         duration: 500,
         message: `Pause`,
-        position: "is-bottom",
+        position: "is-bottom"
       });
     });
     // on sendSync from server
-    mainSocket.on("sendSync", (currentTime) => {
+    mainSocket.on("sendSync", currentTime => {
       this.player.currentTime = currentTime;
       this.$buefy.toast.open({
         duration: 500,
         message: `Syncing`,
-        position: "is-bottom",
+        position: "is-bottom"
       });
     });
   },
-  created() {},
+  methods: {}
 };
 </script>
 
