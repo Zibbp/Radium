@@ -20,7 +20,7 @@
           Synced stream and video playback with VOD capabilities utilizing HLS.
           Developed for movie nights but has many use cases.
           <br /><br />
-          <code>Version {{ $config.VERSION }}</code>
+          <code>Version {{ version }}</code>
           <br /><br />
           <p class="subtitle is-6 has-text-light ">
             Developed by
@@ -48,7 +48,15 @@
 
 <script>
 export default {
-  mounted() {}
+  data() {
+    return {
+      version: null
+    };
+  },
+  mounted() {
+    var pckg = require("../package.json");
+    this.version = pckg.version;
+  }
 };
 </script>
 
