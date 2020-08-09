@@ -82,6 +82,12 @@ The admin token is automatically generated and logged to the console whenever st
  - [Chat Commands](https://github.com/Zibbp/Radium/wiki/Chat-Commands)
  - [Advanced Usage](https://github.com/Zibbp/Radium/wiki/Advanced-Usage)
 
+## Alternatives
+##### Looking for something else? Check out these amazing opensource projects.
+* [MovieNight](https://github.com/zorchenhimer/MovieNight) *This is a single-instance streaming server with chat. Originally written to replace Rabbit as the platform for watching movies with a group of people online.*
+* [Open Streaming Platform](https://gitlab.com/Deamos/flask-nginx-rtmp-manager) *A Self-Hosted Video Streaming and Recording Server Using Python, Flask, Nginx-RTMP.*
+* [Jellyfin](https://github.com/jellyfin/jellyfin) *The Free Software Media System* **v10.6 introduced a synced playback feature**
+
  ## Information
  
 > [zibbp.tech](https://zibbp.tech) &nbsp;&middot;&nbsp;
