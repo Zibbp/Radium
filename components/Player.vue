@@ -1,6 +1,6 @@
 <template>
   <vue-plyr ref="plyr" class="player" :options="playerOptions">
-    <video poster="/radium_poster.png" crossorigin>
+    <video poster="/radium_poster.png">
       <track kind="captions" label="Track 1" :src="subtitleUrl" default />
     </video>
   </vue-plyr>
@@ -8,7 +8,6 @@
 
 <script>
 import Hls from "hls.js";
-var mainSocket = null;
 export default {
   data() {
     return {
@@ -29,7 +28,7 @@ export default {
         ],
         settings: ["captions", "quality", "loop"]
       },
-      subtitleUrl: null
+      subtitleUrl: "http://localhost:3000/subs.vtt"
     };
   },
   computed: {
@@ -38,12 +37,6 @@ export default {
     }
   },
   mounted() {
-    // set default subs
-    this.subtitleUrl = `${this.$config.BASE_URL}/subs.vtt`;
-    // Create socket connection
-    mainSocket = this.$nuxtSocket({
-      persist: "mainSocket"
-    });
     // HLS
     if (Hls.isSupported()) {
       const hls = new Hls();
@@ -52,23 +45,24 @@ export default {
       window.hls = hls;
     }
     // change HLS stream
-    mainSocket.on("setStream", url => {
+    this.$root.mySocket.on("setStream", url => {
       const hls = new Hls();
       hls.loadSource(url);
       hls.attachMedia(this.player.media);
       window.hls = hls;
     });
     // change subtitles
-    mainSocket.on("setSubtitles", url => {
-      this.subtitleUrl = url;
+    this.$root.mySocket.on("setSubtitles", name => {
+      var subUrl = `${this.$config.BASE_URL}/subtitles/${name}`;
+      this.subtitleUrl = subUrl;
       console.log(subUrl);
     });
     // Nuxt bus sync
     this.$nuxt.$on("sync", () => {
-      mainSocket.emit("sync", this.player.currentTime);
+      this.$root.mySocket.emit("sync", this.player.currentTime);
     });
     // on sendPlay from server
-    mainSocket.on("sendPlay", () => {
+    this.$root.mySocket.on("sendPlay", () => {
       this.player.play();
       this.$buefy.toast.open({
         duration: 500,
@@ -77,7 +71,7 @@ export default {
       });
     });
     // on sendPause from server
-    mainSocket.on("sendPause", () => {
+    this.$root.mySocket.on("sendPause", () => {
       this.player.pause();
       this.$buefy.toast.open({
         duration: 500,
@@ -86,7 +80,7 @@ export default {
       });
     });
     // on sendSync from server
-    mainSocket.on("sendSync", currentTime => {
+    this.$root.mySocket.on("sendSync", currentTime => {
       this.player.currentTime = currentTime;
       this.$buefy.toast.open({
         duration: 500,

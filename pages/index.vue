@@ -84,9 +84,6 @@ export default {
     };
   },
   async mounted() {
-    this.socket = this.$nuxtSocket({
-      persist: "mainSocket"
-    });
     if (!this.$store.state.connected) {
       this.prompt();
     }
@@ -120,7 +117,7 @@ export default {
     setUser() {
       this.user.color = colors[Math.floor(Math.random() * colors.length)];
       this.$store.commit("setUser", this.user);
-      this.socket.emit("newUser", this.user);
+      this.$root.mySocket.emit("newUser", this.user);
     }
   }
 };

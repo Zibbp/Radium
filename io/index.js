@@ -35,7 +35,10 @@ export default function() {
           color: user.color,
           admin: user.admin
         };
+
         users.push(u);
+
+        io.emit("userList", users);
       });
 
       socket.on("play", () => {
@@ -58,12 +61,14 @@ export default function() {
         io.emit("sendMessage", message);
       });
 
-      socket.on("changeSubtitles", url => {
-        io.emit("setSubtitles", url);
+      socket.on("changeSubtitles", name => {
+        io.emit("setSubtitles", name);
       });
 
-      socket.on("dump", () => {
-        console.log(users);
+      socket.on("disconnect", () => {
+        const u = users.find(obj => obj.id == socket.id);
+        users.splice(u);
+        io.emit("userList", users);
       });
     });
   });

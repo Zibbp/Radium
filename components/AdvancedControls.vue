@@ -76,47 +76,65 @@
             <div class="column">
               <form class="captions-form">
                 <div v-if="$store.state.user.admin" class="field">
-                  <label class="label controls-label">Change Subtitles</label>
+                  <label class="label controls-label"
+                    >Change Subtitles -
+                    <a
+                      href="https://github.com/Zibbp/Radium/wiki/Subtitles"
+                      target="_blank"
+                      class="has-text-grey-light"
+                      >README</a
+                    ></label
+                  >
                   <div class="field-body">
                     <div class="field">
                       <input
                         class="input"
-                        v-model="subtitleUrl"
+                        v-model="subtitleName"
                         type="text"
-                        placeholder="https://website.com/my_subs.vtt"
+                        placeholder="my_subs.vtt"
                       />
                       <p class="help has-text-light caption-help">
-                        Subtitle URL
+                        Name of subtitle in folder
                       </p>
                     </div>
                   </div>
 
                   <p v-if="subtitleError" class="help is-danger">
-                    Enter a valid subtitle url (.vtt)
+                    Enter the name of your subtitles from the subtitle folder
+                    (.vtt)
                   </p>
                   <b-button type="is-primary" @click.prevent="changeSubtitles"
                     >Change</b-button
                   >
                 </div>
                 <div v-else>
-                  <label class="label controls-label">Change Subtitles</label>
+                  <label class="label controls-label"
+                    >Change Subtitles -
+                    <a
+                      href="https://github.com/Zibbp/Radium/wiki/Subtitles"
+                      target="_blank"
+                      class="has-text-grey-light"
+                      >README</a
+                    ></label
+                  >
                   <div class="field-body">
                     <div class="field">
                       <input
                         class="input"
-                        v-model="subtitleUrl"
+                        v-model="subtitleName"
                         type="text"
-                        placeholder="https://website.com/my_subs.vtt"
+                        placeholder="my_subs.vtt"
                         disabled
                       />
                       <p class="help has-text-light caption-help">
-                        Subtitle URL
+                        Name of subtitle in folder
                       </p>
                     </div>
                   </div>
 
                   <p v-if="subtitleError" class="help is-danger">
-                    Enter a valid subtitle url (.vtt)
+                    Enter the name of your subtitles from the subtitle folder
+                    (.vtt)
                   </p>
                   <b-button
                     type="is-primary"
@@ -135,7 +153,6 @@
 </template>
 
 <script>
-var mainSocket = null;
 export default {
   data() {
     return {
@@ -148,15 +165,12 @@ export default {
           title: "Advanced Controls"
         }
       ],
-      subtitleUrl: "",
+      subtitleName: "",
       subtitleError: false
     };
   },
   mounted() {
     this.firefox = typeof InstallTrigger !== "undefined";
-    mainSocket = this.$nuxtSocket({
-      persist: "mainSocket"
-    });
   },
   methods: {
     changeStream() {
@@ -168,24 +182,24 @@ export default {
         this.url = "";
         this.urlError = true;
       } else {
-        mainSocket.emit("changeStream", this.url);
+        this.$root.mySocket.emit("changeStream", this.url);
         this.url = "";
         this.urlError = false;
       }
     },
     changeSubtitles() {
       // Check if url is a valid (VTT)
-      if (this.subtitleUrl == "") {
-        this.subtitleUrl = "";
+      if (this.subtitleName == "") {
+        this.subtitleName = "";
         this.subtitleError = true;
       } else if (
-        this.subtitleUrl.slice(this.subtitleUrl.length - 4) != ".vtt"
+        this.subtitleName.slice(this.subtitleName.length - 4) != ".vtt"
       ) {
-        this.subtitleUrl = "";
+        this.subtitleName = "";
         this.subtitleError = true;
       } else {
-        mainSocket.emit("changeSubtitles", this.subtitleUrl);
-        this.subtitleUrl = "";
+        this.$root.mySocket.emit("changeSubtitles", this.subtitleName);
+        this.subtitleName = "";
         this.subtitleError = false;
       }
     }
