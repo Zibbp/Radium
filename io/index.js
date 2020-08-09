@@ -67,7 +67,11 @@ export default function() {
 
       socket.on("disconnect", () => {
         const u = users.find(obj => obj.id == socket.id);
-        users.splice(u);
+
+        if (users.indexOf(u) > -1) {
+          users.splice(users.indexOf(u), 1);
+        }
+
         io.emit("userList", users);
       });
     });

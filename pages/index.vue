@@ -12,7 +12,16 @@
       </div>
     </div>
     <div class="under-panel">
-      <div class="container under"><AdvancedControls /></div>
+      <div class="columns is-desktop is-gapless">
+        <div class="column is-6-desktop is-6-widescreen is-6-fullhd">
+          <div class="under container is-fluid"><AdvancedControls /></div>
+        </div>
+        <div class="column is-6-desktop is-6-widescreen is-6-fullhd">
+          <div class="under container is-fluid">
+            <Users />
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -21,6 +30,7 @@
 import Player from "../components/Player";
 import Chat from "../components/Chat";
 import AdvancedControls from "../components/AdvancedControls";
+import Users from "../components/Users";
 const colors = [
   "#FF6633",
   "#FFB399",
