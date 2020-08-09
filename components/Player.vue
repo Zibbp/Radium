@@ -1,6 +1,6 @@
 <template>
   <vue-plyr ref="plyr" class="player" :options="playerOptions">
-    <video poster="/radium_poster.png">
+    <video poster="/radium_poster.png" crossorigin>
       <track kind="captions" label="Track 1" :src="subtitleUrl" default />
     </video>
   </vue-plyr>
@@ -29,7 +29,7 @@ export default {
         ],
         settings: ["captions", "quality", "loop"]
       },
-      subtitleUrl: "http://localhost:3000/subs.vtt"
+      subtitleUrl: null
     };
   },
   computed: {
@@ -38,6 +38,8 @@ export default {
     }
   },
   mounted() {
+    // set default subs
+    this.subtitleUrl = `${this.$config.BASE_URL}/subs.vtt`;
     // Create socket connection
     mainSocket = this.$nuxtSocket({
       persist: "mainSocket"
@@ -57,9 +59,8 @@ export default {
       window.hls = hls;
     });
     // change subtitles
-    mainSocket.on("setSubtitles", name => {
-      var subUrl = `${this.$config.BASE_URL}/subtitles/${name}`;
-      this.subtitleUrl = subUrl;
+    mainSocket.on("setSubtitles", url => {
+      this.subtitleUrl = url;
       console.log(subUrl);
     });
     // Nuxt bus sync
