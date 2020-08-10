@@ -19,7 +19,7 @@
       <div class="card-content">
         <div class="content">
           <div class="user-list">
-            <div v-for="item in users" :key="item.username">
+            <div class="user" v-for="item in users" :key="item.username">
               <div :style="{ color: item.color }">{{ item.username }}</div>
             </div>
           </div>
@@ -60,5 +60,13 @@ export default {
 }
 .caption-help {
   margin-bottom: 1em;
+}
+.user-list {
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+.user {
+  padding-right: 0.5rem;
 }
 </style>

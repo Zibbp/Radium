@@ -13,7 +13,7 @@ export default {
     return {
       playerOptions: {
         clickToPlay: false,
-        autoplay: false,
+        autoplay: true,
         controls: [
           "play",
           "progress",

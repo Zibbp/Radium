@@ -32,6 +32,16 @@
       </div>
       <div class="card-content">
         <div class="content">
+          <h6 class="has-text-grey-lighter">
+            Visit the
+            <a
+              class="link"
+              href="https://github.com/zibbp/radium/wiki"
+              target="_blank"
+              >documentation</a
+            >
+            for more info.
+          </h6>
           <div class="columns is-desktop">
             <!-- SET HLS -->
             <div class="column">
@@ -160,5 +170,28 @@ export default {
 }
 .caption-help {
   margin-bottom: 1em;
+}
+.link {
+  color: hsl(0, 0%, 48%);
+}
+.link:hover {
+  color: hsl(141, 71%, 48%);
+  position: relative;
+}
+.link:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #fff;
+  visibility: hidden;
+  transform: scaleX(0);
+  /* transition: all 0.3s ease-in-out; */
+}
+.link:hover:before {
+  visibility: visible;
+  transform: scaleX(1);
 }
 </style>
