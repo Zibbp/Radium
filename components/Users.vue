@@ -44,7 +44,6 @@ export default {
   },
   mounted() {
     this.$root.mySocket.on("userList", users => {
-      console.log(users);
       this.users = users;
     });
   },

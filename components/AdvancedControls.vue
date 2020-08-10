@@ -33,97 +33,63 @@
       <div class="card-content">
         <div class="content">
           <div class="columns is-desktop">
+            <!-- SET HLS -->
             <div class="column">
-              <form class="video-form">
-                <div v-if="$store.state.user.admin" class="field">
-                  <label class="label controls-label">Change HLS Stream</label>
-                  <input
-                    class="input"
-                    v-model="url"
-                    type="text"
-                    placeholder="https://website.com/video.m3u8"
-                  />
-                  <p class="help has-text-light">HLS Url</p>
-                  <p v-if="urlError" class="help is-danger">
-                    Enter a valid HLS stream (.m3u8)
+              <form>
+                <label class="label has-text-white">Change HLS Stream</label>
+                <p v-if="hlsError" class="help is-danger">
+                  Enter a valid HLS Url (ends with .m3u8)
+                </p>
+                <p v-else class="help has-text-white">HLS Url (.m3u8)</p>
+                <div class="field is-grouped">
+                  <p class="control is-expanded">
+                    <input
+                      v-model="hlsUrl"
+                      class="input"
+                      type="text"
+                      placeholder="https://website.com/stream.m3u8"
+                      :disabled="!$store.state.user.admin"
+                    />
                   </p>
-                  <b-button type="is-primary" @click.prevent="changeStream"
-                    >Change</b-button
-                  >
-                </div>
-                <div v-else class="field">
-                  <label class="label controls-label">Change HLS Stream</label>
-                  <input
-                    class="input"
-                    v-model="url"
-                    type="text"
-                    placeholder="https://website.com/video.m3u8"
-                    disabled
-                  />
-                  <p class="help has-text-light">HLS Url</p>
-                  <p v-if="urlError" class="help is-danger">
-                    Enter a valid HLS stream (.m3u8)
+                  <p class="control">
+                    <a
+                      class="button is-success"
+                      @click.prevent="changeStream"
+                      :disabled="!$store.state.user.admin"
+                    >
+                      Change
+                    </a>
                   </p>
-                  <b-button
-                    type="is-primary"
-                    @click.prevent="changeStream"
-                    disabled
-                    >Change</b-button
-                  >
                 </div>
               </form>
             </div>
+            <!-- SET SUBTITLES -->
             <div class="column">
-              <form class="captions-form">
-                <div v-if="$store.state.user.admin" class="field">
-                  <label class="label controls-label">Change Subtitles</label>
-                  <div class="field-body">
-                    <div class="field">
-                      <input
-                        class="input"
-                        v-model="subtitleUrl"
-                        type="text"
-                        placeholder="https://website.com/my_subs.vtt"
-                      />
-                      <p class="help has-text-light caption-help">
-                        Subtitle URL
-                      </p>
-                    </div>
-                  </div>
-
-                  <p v-if="subtitleError" class="help is-danger">
-                    Enter a valid subtitle url (.vtt)
+              <form>
+                <label class="label has-text-white">Change Subtitles</label>
+                <p v-if="subtitleError" class="help is-danger">
+                  Enter a valid subtitle Url (ends with .vtt)
+                </p>
+                <p v-else class="help has-text-white">Subtitle Url (.vtt)</p>
+                <div class="field is-grouped">
+                  <p class="control is-expanded">
+                    <input
+                      v-model="subtitleUrl"
+                      class="input"
+                      type="text"
+                      placeholder="https://website.com/subs.vtt"
+                      :disabled="!$store.state.user.admin"
+                    />
                   </p>
-                  <b-button type="is-primary" @click.prevent="changeSubtitles"
-                    >Change</b-button
-                  >
-                </div>
-                <div v-else>
-                  <label class="label controls-label">Change Subtitles</label>
-                  <div class="field-body">
-                    <div class="field">
-                      <input
-                        class="input"
-                        v-model="subtitleUrl"
-                        type="text"
-                        placeholder="https://website.com/my_subs.vtt"
-                        disabled
-                      />
-                      <p class="help has-text-light caption-help">
-                        Subtitle URL
-                      </p>
-                    </div>
-                  </div>
-
-                  <p v-if="subtitleError" class="help is-danger">
-                    Enter a valid subtitle url (.vtt)
+                  <p class="control">
+                    <a
+                      class="button is-success"
+                      @click.prevent="changeSubtitles"
+                      :disabled="!$store.state.user.admin"
+                    >
+                      Change
+                    </a>
                   </p>
-                  <b-button
-                    type="is-primary"
-                    @click.prevent="changeSubtitles"
-                    disabled
-                    >Change</b-button
-                  >
                 </div>
               </form>
             </div>
@@ -139,8 +105,8 @@ export default {
   data() {
     return {
       firefox: null,
-      url: "",
-      urlError: false,
+      hlsUrl: "",
+      hlsError: false,
       isOpen: 1,
       collapses: [
         {
@@ -157,27 +123,23 @@ export default {
   methods: {
     changeStream() {
       // Check if url is a proper HLS stream then emit to Player
-      if (this.url == "") {
-        this.url = "";
-        this.urlError = true;
-      } else if (this.url.slice(this.url.length - 5) != ".m3u8") {
-        this.url = "";
-        this.urlError = true;
+      if (this.hlsUrl == "") {
+        this.hlsUrl = "";
+      } else if (this.hlsUrl.slice(this.hlsUrl.length - 5) != ".m3u8") {
+        this.hlsError = true;
       } else {
-        this.$root.mySocket.emit("changeStream", this.url);
-        this.url = "";
-        this.urlError = false;
+        this.$root.mySocket.emit("changeStream", this.hlsUrl);
+        this.hlsUrl = "";
+        this.hlsError = false;
       }
     },
     changeSubtitles() {
       // Check if url is a valid (VTT)
       if (this.subtitleUrl == "") {
         this.subtitleUrl = "";
-        this.subtitleError = true;
       } else if (
         this.subtitleUrl.slice(this.subtitleUrl.length - 4) != ".vtt"
       ) {
-        this.subtitleUrl = "";
         this.subtitleError = true;
       } else {
         this.$root.mySocket.emit("changeSubtitles", this.subtitleUrl);

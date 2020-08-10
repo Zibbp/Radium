@@ -1,6 +1,6 @@
 <template>
   <vue-plyr ref="plyr" class="player" :options="playerOptions">
-    <video poster="/radium_poster.png">
+    <video poster="/radium_poster.png" crossorigin>
       <track kind="captions" label="Track 1" :src="subtitleUrl" default />
     </video>
   </vue-plyr>
@@ -52,10 +52,8 @@ export default {
       window.hls = hls;
     });
     // change subtitles
-    this.$root.mySocket.on("setSubtitles", name => {
-      var subUrl = `${this.$config.BASE_URL}/subtitles/${name}`;
-      this.subtitleUrl = subUrl;
-      console.log(subUrl);
+    this.$root.mySocket.on("setSubtitles", url => {
+      this.subtitleUrl = url;
     });
     // Nuxt bus sync
     this.$nuxt.$on("sync", () => {

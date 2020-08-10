@@ -61,8 +61,8 @@ export default function() {
         io.emit("sendMessage", message);
       });
 
-      socket.on("changeSubtitles", name => {
-        io.emit("setSubtitles", name);
+      socket.on("changeSubtitles", url => {
+        io.emit("setSubtitles", url);
       });
 
       socket.on("disconnect", () => {
