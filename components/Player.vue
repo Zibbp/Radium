@@ -28,7 +28,7 @@ export default {
         ],
         settings: ["captions", "quality", "loop"]
       },
-      subtitleUrl: "http://localhost:3000/subs.vtt"
+      subtitleUrl: `${this.$config.BASE_URL}/subs.vtt`
     };
   },
   computed: {
