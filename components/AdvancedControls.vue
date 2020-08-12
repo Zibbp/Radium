@@ -32,116 +32,74 @@
       </div>
       <div class="card-content">
         <div class="content">
+          <h6 class="has-text-grey-lighter">
+            Visit the
+            <a
+              class="link"
+              href="https://github.com/zibbp/radium/wiki"
+              target="_blank"
+              >documentation</a
+            >
+            for more info.
+          </h6>
           <div class="columns is-desktop">
+            <!-- SET HLS -->
             <div class="column">
-              <form class="video-form">
-                <div v-if="$store.state.user.admin" class="field">
-                  <label class="label controls-label">Change HLS Stream</label>
-                  <input
-                    class="input"
-                    v-model="url"
-                    type="text"
-                    placeholder="https://website.com/video.m3u8"
-                  />
-                  <p class="help has-text-light">HLS Url</p>
-                  <p v-if="urlError" class="help is-danger">
-                    Enter a valid HLS stream (.m3u8)
+              <form>
+                <label class="label has-text-white">Change HLS Stream</label>
+                <p v-if="hlsError" class="help is-danger">
+                  Enter a valid HLS Url (ends with .m3u8)
+                </p>
+                <p v-else class="help has-text-white">HLS Url (.m3u8)</p>
+                <div class="field is-grouped">
+                  <p class="control is-expanded">
+                    <input
+                      v-model="hlsUrl"
+                      class="input"
+                      type="text"
+                      placeholder="https://website.com/stream.m3u8"
+                      :disabled="!$store.state.user.admin"
+                    />
                   </p>
-                  <b-button type="is-primary" @click.prevent="changeStream"
-                    >Change</b-button
-                  >
-                </div>
-                <div v-else class="field">
-                  <label class="label controls-label">Change HLS Stream</label>
-                  <input
-                    class="input"
-                    v-model="url"
-                    type="text"
-                    placeholder="https://website.com/video.m3u8"
-                    disabled
-                  />
-                  <p class="help has-text-light">HLS Url</p>
-                  <p v-if="urlError" class="help is-danger">
-                    Enter a valid HLS stream (.m3u8)
+                  <p class="control">
+                    <a
+                      class="button is-success"
+                      @click.prevent="changeStream"
+                      :disabled="!$store.state.user.admin"
+                    >
+                      Change
+                    </a>
                   </p>
-                  <b-button
-                    type="is-primary"
-                    @click.prevent="changeStream"
-                    disabled
-                    >Change</b-button
-                  >
                 </div>
               </form>
             </div>
+            <!-- SET SUBTITLES -->
             <div class="column">
-              <form class="captions-form">
-                <div v-if="$store.state.user.admin" class="field">
-                  <label class="label controls-label"
-                    >Change Subtitles -
-                    <a
-                      href="https://github.com/Zibbp/Radium/wiki/Subtitles"
-                      target="_blank"
-                      class="has-text-grey-light"
-                      >README</a
-                    ></label
-                  >
-                  <div class="field-body">
-                    <div class="field">
-                      <input
-                        class="input"
-                        v-model="subtitleName"
-                        type="text"
-                        placeholder="my_subs.vtt"
-                      />
-                      <p class="help has-text-light caption-help">
-                        Name of subtitle in folder
-                      </p>
-                    </div>
-                  </div>
-
-                  <p v-if="subtitleError" class="help is-danger">
-                    Enter the name of your subtitles from the subtitle folder
-                    (.vtt)
+              <form>
+                <label class="label has-text-white">Change Subtitles</label>
+                <p v-if="subtitleError" class="help is-danger">
+                  Enter a valid subtitle Url (ends with .vtt)
+                </p>
+                <p v-else class="help has-text-white">Subtitle Url (.vtt)</p>
+                <div class="field is-grouped">
+                  <p class="control is-expanded">
+                    <input
+                      v-model="subtitleUrl"
+                      class="input"
+                      type="text"
+                      placeholder="https://website.com/subs.vtt"
+                      :disabled="!$store.state.user.admin"
+                    />
                   </p>
-                  <b-button type="is-primary" @click.prevent="changeSubtitles"
-                    >Change</b-button
-                  >
-                </div>
-                <div v-else>
-                  <label class="label controls-label"
-                    >Change Subtitles -
+                  <p class="control">
                     <a
-                      href="https://github.com/Zibbp/Radium/wiki/Subtitles"
-                      target="_blank"
-                      class="has-text-grey-light"
-                      >README</a
-                    ></label
-                  >
-                  <div class="field-body">
-                    <div class="field">
-                      <input
-                        class="input"
-                        v-model="subtitleName"
-                        type="text"
-                        placeholder="my_subs.vtt"
-                        disabled
-                      />
-                      <p class="help has-text-light caption-help">
-                        Name of subtitle in folder
-                      </p>
-                    </div>
-                  </div>
-
-                  <p v-if="subtitleError" class="help is-danger">
-                    Enter the name of your subtitles from the subtitle folder
-                    (.vtt)
+                      class="button is-success"
+                      @click.prevent="changeSubtitles"
+                      :disabled="!$store.state.user.admin"
+                    >
+                      Change
+                    </a>
                   </p>
-                  <b-button
-                    type="is-primary"
-                    @click.prevent="changeSubtitles"
-                    disabled
-                    >Change</b-button
-                  >
                 </div>
               </form>
             </div>
@@ -153,57 +111,49 @@
 </template>
 
 <script>
-var mainSocket = null;
 export default {
   data() {
     return {
       firefox: null,
-      url: "",
-      urlError: false,
+      hlsUrl: "",
+      hlsError: false,
       isOpen: 1,
       collapses: [
         {
           title: "Advanced Controls"
         }
       ],
-      subtitleName: "",
+      subtitleUrl: "",
       subtitleError: false
     };
   },
   mounted() {
     this.firefox = typeof InstallTrigger !== "undefined";
-    mainSocket = this.$nuxtSocket({
-      persist: "mainSocket"
-    });
   },
   methods: {
     changeStream() {
       // Check if url is a proper HLS stream then emit to Player
-      if (this.url == "") {
-        this.url = "";
-        this.urlError = true;
-      } else if (this.url.slice(this.url.length - 5) != ".m3u8") {
-        this.url = "";
-        this.urlError = true;
+      if (this.hlsUrl == "") {
+        this.hlsUrl = "";
+      } else if (this.hlsUrl.slice(this.hlsUrl.length - 5) != ".m3u8") {
+        this.hlsError = true;
       } else {
-        mainSocket.emit("changeStream", this.url);
-        this.url = "";
-        this.urlError = false;
+        this.$root.mySocket.emit("changeStream", this.hlsUrl);
+        this.hlsUrl = "";
+        this.hlsError = false;
       }
     },
     changeSubtitles() {
       // Check if url is a valid (VTT)
-      if (this.subtitleName == "") {
-        this.subtitleName = "";
-        this.subtitleError = true;
+      if (this.subtitleUrl == "") {
+        this.subtitleUrl = "";
       } else if (
-        this.subtitleName.slice(this.subtitleName.length - 4) != ".vtt"
+        this.subtitleUrl.slice(this.subtitleUrl.length - 4) != ".vtt"
       ) {
-        this.subtitleName = "";
         this.subtitleError = true;
       } else {
-        mainSocket.emit("changeSubtitles", this.subtitleName);
-        this.subtitleName = "";
+        this.$root.mySocket.emit("changeSubtitles", this.subtitleUrl);
+        this.subtitleUrl = "";
         this.subtitleError = false;
       }
     }
@@ -220,5 +170,28 @@ export default {
 }
 .caption-help {
   margin-bottom: 1em;
+}
+.link {
+  color: hsl(0, 0%, 48%);
+}
+.link:hover {
+  color: hsl(141, 71%, 48%);
+  position: relative;
+}
+.link:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #fff;
+  visibility: hidden;
+  transform: scaleX(0);
+  /* transition: all 0.3s ease-in-out; */
+}
+.link:hover:before {
+  visibility: visible;
+  transform: scaleX(1);
 }
 </style>

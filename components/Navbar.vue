@@ -72,7 +72,6 @@
 
 <script>
 import Info from "./Info";
-var mainSocket = null;
 export default {
   data() {
     return {
@@ -80,16 +79,17 @@ export default {
     };
   },
   mounted() {
-    mainSocket = this.$nuxtSocket({
-      persist: "mainSocket"
+    this.$root.mySocket = this.$nuxtSocket({
+      teardown: false,
+      name: "main"
     });
   },
   methods: {
     play() {
-      mainSocket.emit("play");
+      this.$root.mySocket.emit("play");
     },
     pause() {
-      mainSocket.emit("pause");
+      this.$root.mySocket.emit("pause");
     },
     sync() {
       $nuxt.$emit("sync");

@@ -21,12 +21,24 @@ export default function() {
     });
 
     var users = [];
+    var connections = [];
 
     // Add socket.io events
     const messages = [];
     io.on("connection", socket => {
+      connections.push(socket);
+
       socket.on("newUser", user => {
-        users.push(user);
+        const u = {
+          id: socket.id,
+          username: user.username,
+          color: user.color,
+          admin: user.admin
+        };
+
+        users.push(u);
+
+        io.emit("userList", users);
       });
 
       socket.on("play", () => {
@@ -49,8 +61,18 @@ export default function() {
         io.emit("sendMessage", message);
       });
 
-      socket.on("changeSubtitles", name => {
-        io.emit("setSubtitles", name);
+      socket.on("changeSubtitles", url => {
+        io.emit("setSubtitles", url);
+      });
+
+      socket.on("disconnect", () => {
+        const u = users.find(obj => obj.id == socket.id);
+
+        if (users.indexOf(u) > -1) {
+          users.splice(users.indexOf(u), 1);
+        }
+
+        io.emit("userList", users);
       });
     });
   });

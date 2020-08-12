@@ -36,7 +36,6 @@
 <script>
 import Help from "./Help";
 import Emotes from "./Emotes";
-var mainSocket = null;
 export default {
   data() {
     return {
@@ -47,10 +46,7 @@ export default {
     };
   },
   mounted() {
-    mainSocket = this.$nuxtSocket({
-      persist: "mainSocket"
-    });
-    mainSocket.on("sendMessage", message => {
+    this.$root.mySocket.on("sendMessage", message => {
       this.chat.push(message);
       this.$nextTick(() => {
         this.setScrollToEnd();
@@ -113,7 +109,7 @@ export default {
               message: result,
               user: this.$store.state.user
             };
-            mainSocket.emit("message", message);
+            this.$root.mySocket.emit("message", message);
             this.message = "";
           }
       }
