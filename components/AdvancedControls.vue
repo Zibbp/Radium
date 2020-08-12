@@ -1,19 +1,5 @@
 <template>
   <section>
-    <b-notification
-      v-if="firefox"
-      type="is-warning"
-      has-icon
-      aria-close-label="Close notification"
-      role="alert"
-    >
-      It appears you are using this site with Firefox. Features may be unstable
-      on Firefox.<br />
-      <b>Known Firefox issues:</b> Subtitles not functioning properly, Periodic
-      frame stutters in the video. <br />
-      If these issues occur, please switch browsers.
-    </b-notification>
-
     <b-collapse
       class="card has-background-dark advanced-controls"
       animation="slide"
@@ -114,7 +100,6 @@
 export default {
   data() {
     return {
-      firefox: null,
       hlsUrl: "",
       hlsError: false,
       isOpen: 1,
@@ -127,9 +112,7 @@ export default {
       subtitleError: false
     };
   },
-  mounted() {
-    this.firefox = typeof InstallTrigger !== "undefined";
-  },
+  mounted() {},
   methods: {
     changeStream() {
       // Check if url is a proper HLS stream then emit to Player
