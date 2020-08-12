@@ -20,7 +20,14 @@
           Synced stream and video playback with VOD capabilities utilizing HLS.
           Developed for movie nights but has many use cases.
           <br /><br />
-          <code>Version {{ version }}</code>
+          <code>Version {{ version }}</code
+          ><br />
+          <a
+            href="https://github.com/Zibbp/Radium/releases"
+            target="_blank"
+            class="has-text-success"
+            >Changelog</a
+          >
           <br /><br />
           <p class="subtitle is-6 has-text-light ">
             Developed by
