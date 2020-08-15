@@ -44,12 +44,50 @@ export default {
       hls.attachMedia(this.player.media);
       window.hls = hls;
     }
+    // Send player state to server for new client
+    this.$root.mySocket.on("requestState", id => {
+      var time = this.player.currentTime;
+      var state = this.player.playing;
+      var id = id;
+      var data = { time, state, id };
+      this.$root.mySocket.emit("sendState", data);
+    });
+    // If new client, set state from server
+    this.$root.mySocket.on("setState", state => {
+      // Set HLS stream
+      if (state.roomHlsUrl) {
+        const hls = new Hls();
+        hls.loadSource(state.roomHlsUrl);
+        hls.attachMedia(this.player.media);
+        window.hls = hls;
+      }
+      // Set subtitles
+      if (state.roomSubtitleUrl) {
+        setTimeout(() => {
+          this.subtitleUrl = state.roomSubtitleUrl;
+        }, 1000);
+      }
+      // Set time
+      if (state.roomTime) {
+        setTimeout(() => {
+          this.player.currentTime = state.roomTime;
+        }, 1000);
+      }
+      // Set player state
+      if (state.roomState == true) {
+        this.player.play();
+      }
+      if (state.roomState == false) {
+        this.player.pause();
+      }
+    });
     // change HLS stream
     this.$root.mySocket.on("setStream", url => {
       const hls = new Hls();
       hls.loadSource(url);
       hls.attachMedia(this.player.media);
       window.hls = hls;
+      this.player.play();
     });
     // change subtitles
     this.$root.mySocket.on("setSubtitles", url => {
@@ -103,5 +141,11 @@ export default {
 .plyr .video {
   height: 100% !important;
   width: 100%;
+}
+.plyr__captions .plyr__caption {
+  font-size: 26px !important;
+}
+.plyr__captions {
+  padding-bottom: 7vh;
 }
 </style>

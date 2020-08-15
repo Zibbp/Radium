@@ -22,12 +22,15 @@ export default function() {
 
     var users = [];
     var connections = [];
+    let roomHlsUrl = null;
+    let roomSubtitleUrl = null;
 
     // Add socket.io events
     const messages = [];
     io.on("connection", socket => {
       connections.push(socket);
 
+      // When new user connects
       socket.on("newUser", user => {
         const u = {
           id: socket.id,
@@ -36,9 +39,35 @@ export default function() {
           admin: user.admin
         };
 
+        // Push user into array
         users.push(u);
 
+        // Sent user list to clients
         io.emit("userList", users);
+
+        // Only request state if an admin is in room
+        const check = users.find(obj => obj.admin == true);
+        if (check) {
+          // request info from that admin
+          io.to(check.id).emit("requestState", socket.id);
+        }
+      });
+
+      // Send state to new client (only ran if admin is in room)
+      socket.on("sendState", data => {
+        var state = {
+          roomHlsUrl,
+          roomSubtitleUrl,
+          roomTime: data.time,
+          roomState: data.state
+        };
+        io.to(data.id).emit("setState", state);
+      });
+
+      // On successful admin authentication find and give user admin
+      socket.on("setAdmin", user => {
+        const u = users.find(obj => obj.id == socket.id);
+        u.admin = true;
       });
 
       socket.on("play", () => {
@@ -54,6 +83,7 @@ export default function() {
       });
 
       socket.on("changeStream", url => {
+        roomHlsUrl = url;
         io.emit("setStream", url);
       });
 
@@ -62,9 +92,11 @@ export default function() {
       });
 
       socket.on("changeSubtitles", url => {
+        roomSubtitleUrl = url;
         io.emit("setSubtitles", url);
       });
 
+      // On disconnect find and remove user from users array
       socket.on("disconnect", () => {
         const u = users.find(obj => obj.id == socket.id);
 
