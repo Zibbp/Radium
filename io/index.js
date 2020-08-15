@@ -68,6 +68,7 @@ export default function() {
       socket.on("setAdmin", user => {
         const u = users.find(obj => obj.id == socket.id);
         u.admin = true;
+        io.emit("userList", users);
       });
 
       socket.on("play", () => {
