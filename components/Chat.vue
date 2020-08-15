@@ -86,6 +86,7 @@ export default {
                 type: "is-success"
               });
               this.$store.commit("isAdmin");
+              this.$root.mySocket.emit("setAdmin", this.$store.state.user);
               this.message = "";
             } catch (error) {
               this.$buefy.toast.open({

@@ -31,7 +31,7 @@
             <b-tooltip
               v-else
               label="Only admins can sync the room"
-              type="is-dark"
+              type="is-success"
               position="is-left"
               class="sync-tooltip"
             >
@@ -39,16 +39,28 @@
                 <b-icon icon="sync"></b-icon>
               </button>
             </b-tooltip>
-            <button
+            <b-tooltip
               v-if="this.$store.state.chat"
-              class="button is-dark"
-              @click="toggleChat"
+              label="Hide Chat"
+              :delay="500"
+              position="is-left"
+              type="is-success"
             >
-              <b-icon icon="arrow-collapse-right"></b-icon>
-            </button>
-            <button v-else class="button is-dark" @click="toggleChat">
-              <b-icon icon="arrow-collapse-left"></b-icon>
-            </button>
+              <button class="button is-dark" @click="toggleChat">
+                <b-icon icon="arrow-collapse-right"></b-icon>
+              </button>
+            </b-tooltip>
+            <b-tooltip
+              v-else
+              label="Show Chat"
+              :delay="500"
+              position="is-left"
+              type="is-success"
+            >
+              <button class="button is-dark" @click="toggleChat">
+                <b-icon icon="arrow-collapse-left"></b-icon>
+              </button>
+            </b-tooltip>
             <b-tag
               v-if="$store.state.user.admin"
               class="admin-tag"

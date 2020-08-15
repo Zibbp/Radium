@@ -20,7 +20,17 @@
         <div class="content">
           <div class="user-list">
             <div class="user" v-for="item in users" :key="item.username">
-              <div :style="{ color: item.color }">{{ item.username }}</div>
+              <div :style="{ color: item.color }">
+                <b-icon
+                  v-if="item.admin"
+                  icon="cog"
+                  size="is-small"
+                  class="admin-icon"
+                  type="is-light"
+                >
+                </b-icon
+                >{{ item.username }}
+              </div>
             </div>
           </div>
         </div>
