@@ -15,7 +15,7 @@
   Nginx-RTMP-HLS <a href="https://github.com/Zibbp/Nginx-RTMP-HLS"><img src="https://github.com/Zibbp/Nginx-RTMP-HLS/workflows/Build/badge.svg"></a>
 </p>
 
-![screenshot](https://i.imgur.com/qW0onMq.png)
+![screenshot](https://i.imgur.com/I4yOWND.jpg)
 
 ## Features
 
