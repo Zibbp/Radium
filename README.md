@@ -15,7 +15,7 @@
   Nginx-RTMP-HLS <a href="https://github.com/Zibbp/Nginx-RTMP-HLS"><img src="https://github.com/Zibbp/Nginx-RTMP-HLS/workflows/Build/badge.svg"></a>
 </p>
 
-![screenshot](https://i.imgur.com/qW0onMq.png)
+![screenshot](https://i.imgur.com/I4yOWND.jpg)
 
 ## Features
 
@@ -44,6 +44,8 @@ Radium runs in a Docker container, simply modify and run the docker command.
 # Basic Docker Container
 $ docker run -d --name=radium -p 3000:3000 -e BASE_URL=https://radium.example.com zibbp/radium:latest
 ```
+
+**Prefer using docker compose? Check out the [`docker-compose.yml`](https://github.com/Zibbp/Radium/blob/master/docker-compose.yml)**
 
 ### Options
 
