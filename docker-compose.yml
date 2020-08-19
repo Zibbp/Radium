@@ -1,0 +1,11 @@
+version: "3.3"
+services:
+  radium:
+    container_name: radium
+    ports:
+      - "3000:3000"
+    environment:
+      - "BASE_URL=https://radium.example.com"
+      #  - 'HLS_URL=https://domain.com/stream.m3u8'
+      #  - ADMIN_TOKEN=secret123
+    image: "zibbp/radium:latest"

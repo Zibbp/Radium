@@ -45,6 +45,8 @@ Radium runs in a Docker container, simply modify and run the docker command.
 $ docker run -d --name=radium -p 3000:3000 -e BASE_URL=https://radium.example.com zibbp/radium:latest
 ```
 
+**Prefer using docker compose? Check out the [`docker-compose.yml`](https://github.com/Zibbp/Radium/blob/master/docker-compose.yml)**
+
 ### Options
 
 ##### Base URL _(REQUIRED)_
