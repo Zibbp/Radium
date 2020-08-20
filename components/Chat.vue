@@ -75,27 +75,37 @@ export default {
         default:
           if (this.message.substring(0, 5) == "/auth") {
             var code = this.message.substring(6);
-            try {
-              var res = await this.$axios.get(
-                `${this.$config.BASE_URL}/api/auth/${code}`
-              );
-              this.$buefy.toast.open({
-                duration: 1000,
-                message: `Authenticated`,
-                position: "is-top",
-                type: "is-success"
-              });
-              this.$store.commit("isAdmin");
-              this.$root.mySocket.emit("setAdmin", this.$store.state.user);
+            if (!code) {
               this.message = "";
-            } catch (error) {
               this.$buefy.toast.open({
                 duration: 1000,
-                message: `Incorrect Code`,
+                message: `Enter a Code`,
                 position: "is-top",
                 type: "is-danger"
               });
-              this.message = "";
+            } else {
+              try {
+                var res = await this.$axios.get(
+                  `${this.$config.BASE_URL}/api/auth/${code}`
+                );
+                this.$buefy.toast.open({
+                  duration: 1000,
+                  message: `Authenticated`,
+                  position: "is-top",
+                  type: "is-success"
+                });
+                this.$store.commit("isAdmin");
+                this.$root.mySocket.emit("setAdmin", this.$store.state.user);
+                this.message = "";
+              } catch (error) {
+                this.$buefy.toast.open({
+                  duration: 1000,
+                  message: `Incorrect Code`,
+                  position: "is-top",
+                  type: "is-danger"
+                });
+                this.message = "";
+              }
             }
           } else {
             const stringArr = this.message.split(" ");
