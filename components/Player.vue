@@ -24,17 +24,17 @@ export default {
           "volume",
           "captions",
           "settings",
-          "fullscreen"
+          "fullscreen",
         ],
-        settings: ["captions", "quality", "loop"]
+        settings: ["captions", "quality", "loop"],
       },
-      subtitleUrl: `${this.$config.BASE_URL}/subs.vtt`
+      subtitleUrl: `${this.$config.BASE_URL}/subs.vtt`,
     };
   },
   computed: {
     player() {
       return this.$refs.plyr.player;
-    }
+    },
   },
   mounted() {
     // HLS
@@ -45,7 +45,7 @@ export default {
       window.hls = hls;
     }
     // Send player state to server for new client
-    this.$root.mySocket.on("requestState", id => {
+    this.$root.mySocket.on("requestState", (id) => {
       var time = this.player.currentTime;
       var state = this.player.playing;
       var id = id;
@@ -53,7 +53,7 @@ export default {
       this.$root.mySocket.emit("sendState", data);
     });
     // If new client, set state from server
-    this.$root.mySocket.on("setState", state => {
+    this.$root.mySocket.on("setState", (state) => {
       // Set HLS stream
       if (state.roomHlsUrl) {
         const hls = new Hls();
@@ -82,16 +82,30 @@ export default {
       }
     });
     // change HLS stream
-    this.$root.mySocket.on("setStream", url => {
+    this.$root.mySocket.on("setStream", (url) => {
       const hls = new Hls();
       hls.loadSource(url);
       hls.attachMedia(this.player.media);
       window.hls = hls;
       this.player.play();
+      // Toast notification
+      this.$buefy.toast.open({
+        duration: 2000,
+        message: `Changed HLS Stream`,
+        position: "is-bottom",
+        type: "is-success",
+      });
     });
     // change subtitles
-    this.$root.mySocket.on("setSubtitles", url => {
+    this.$root.mySocket.on("setSubtitles", (url) => {
       this.subtitleUrl = url;
+      // Toast notification
+      this.$buefy.toast.open({
+        duration: 2000,
+        message: `Changed Subtitles`,
+        position: "is-bottom",
+        type: "is-success",
+      });
     });
     // Nuxt bus sync
     this.$nuxt.$on("sync", () => {
@@ -103,7 +117,7 @@ export default {
       this.$buefy.toast.open({
         duration: 500,
         message: `Play`,
-        position: "is-bottom"
+        position: "is-bottom",
       });
     });
     // on sendPause from server
@@ -112,20 +126,20 @@ export default {
       this.$buefy.toast.open({
         duration: 500,
         message: `Pause`,
-        position: "is-bottom"
+        position: "is-bottom",
       });
     });
     // on sendSync from server
-    this.$root.mySocket.on("sendSync", currentTime => {
+    this.$root.mySocket.on("sendSync", (currentTime) => {
       this.player.currentTime = currentTime;
       this.$buefy.toast.open({
         duration: 500,
         message: `Syncing`,
-        position: "is-bottom"
+        position: "is-bottom",
       });
     });
   },
-  methods: {}
+  methods: {},
 };
 </script>
 
