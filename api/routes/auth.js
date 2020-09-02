@@ -14,11 +14,6 @@ if (config.default.publicRuntimeConfig.ADMIN_TOKEN) {
   console.log(`Admin token: ${adminToken}`);
 }
 
-/* GET users listing. */
-router.get("/auth", function(req, res, next) {
-  res.json({ yep: "cock" });
-});
-
 router.get("/auth/:id", function(req, res, next) {
   try {
     if (req.params.id === adminToken) {
