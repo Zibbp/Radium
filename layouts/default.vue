@@ -11,6 +11,10 @@ export default {};
 </script>
 
 <style>
+html {
+  background-color: #252525;
+}
+
 body::-webkit-scrollbar {
   width: 10px;
   background-color: #555555;
