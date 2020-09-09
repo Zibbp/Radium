@@ -5,12 +5,10 @@ const socket = require("socket.io");
 const app = express();
 
 // Require API routes
-const test = require("./routes/test");
 const auth = require("./routes/auth");
 const emotes = require("./routes/emotes");
 
 // Import API Routes
-app.use(test);
 app.use(auth);
 app.use(emotes);
 
