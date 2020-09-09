@@ -7,17 +7,12 @@ const config = require("../../nuxt.config.js");
 const router = Router();
 
 if (config.default.publicRuntimeConfig.ADMIN_TOKEN) {
-  var adminToken = config.default.publicRuntimeConfig.ADMIN_TOKEN;
+  var adminToken = config.default.publicRuntimeConfig.ADMIN_TOKEN.toString();
   console.log(`Admin token: ${adminToken}`);
 } else {
   var adminToken = crypto.randomBytes(3).toString("hex");
   console.log(`Admin token: ${adminToken}`);
 }
-
-/* GET users listing. */
-router.get("/auth", function(req, res, next) {
-  res.json({ yep: "cock" });
-});
 
 router.get("/auth/:id", function(req, res, next) {
   try {
