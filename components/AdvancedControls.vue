@@ -27,7 +27,7 @@
           </h6>
           <div class="columns is-desktop">
             <!-- SET HLS -->
-            <div class="column">
+            <div class="column is-6">
               <form>
                 <label class="label has-text-white">Change HLS Stream</label>
                 <p v-if="hlsError" class="help is-danger">Enter a valid HLS Url (ends with .m3u8)</p>
@@ -44,7 +44,7 @@
                   </p>
                   <p class="control">
                     <a
-                      class="button is-success"
+                      class="button is-black"
                       @click.prevent="changeStream"
                       :disabled="!$store.state.user.admin"
                     >Change</a>
@@ -53,7 +53,7 @@
               </form>
             </div>
             <!-- SET SUBTITLES -->
-            <div class="column">
+            <div class="column is-6">
               <form>
                 <label class="label has-text-white">Change Subtitles</label>
                 <p
@@ -73,10 +73,39 @@
                   </p>
                   <p class="control">
                     <a
-                      class="button is-success"
+                      class="button is-black"
                       @click.prevent="changeSubtitles"
                       :disabled="!$store.state.user.admin"
                     >Change</a>
+                  </p>
+                </div>
+              </form>
+            </div>
+          </div>
+          <!-- Change "Now Playing" -->
+          <div class="columns is-desktop">
+            <div class="column is-6">
+              <form>
+                <label class="label has-text-white">Now Playing</label>
+                <p v-if="hlsError" class="help is-danger">Enter a Movie or TV Show</p>
+                <p v-else class="help has-text-white">Enter a Movie or TV Show</p>
+                <div class="field is-grouped">
+                  <p class="control is-expanded">
+                    <input
+                      v-model="playing"
+                      class="input"
+                      type="text"
+                      placeholder="Game of Thrones"
+                      :disabled="!$store.state.user.admin"
+                    />
+                  </p>
+                  <p class="control">
+                    <b-button
+                      class="is-black"
+                      @click.prevent="nowplaying"
+                      :disabled="!$store.state.user.admin"
+                      :loading="loading"
+                    >Change</b-button>
                   </p>
                 </div>
               </form>
@@ -94,6 +123,8 @@ export default {
     return {
       hlsUrl: "",
       hlsError: false,
+      playing: "",
+      loading: false,
       isOpen: 1,
       collapses: [
         {
@@ -104,7 +135,11 @@ export default {
       subtitleError: false,
     };
   },
-  mounted() {},
+  mounted() {
+    this.$nuxt.$on("stopLoading", () => {
+      this.loading = false;
+    });
+  },
   methods: {
     changeStream() {
       // Check if url is a proper HLS stream then emit to Player
@@ -130,6 +165,15 @@ export default {
         this.$root.mySocket.emit("changeSubtitles", this.subtitleUrl);
         this.subtitleUrl = "";
         this.subtitleError = false;
+      }
+    },
+    nowplaying() {
+      if (this.playing == "") {
+        this.playing = "";
+      } else {
+        this.$root.mySocket.emit("nowPlaying", this.playing);
+        this.playing = "";
+        this.loading = true;
       }
     },
   },

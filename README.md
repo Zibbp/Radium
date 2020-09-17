@@ -53,6 +53,8 @@ $ docker run -d --name=radium -p 3000:3000 -e BASE_URL=https://radium.example.co
 
 The base url is required for basic functionality.
 
+_If not using a reverse proxy and a domain, the IP and PORT need to be supplied._
+
 ```bash
 # Add the following environment variable
 -e BASE_URL=https://radium.example.com
