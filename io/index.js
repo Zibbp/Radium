@@ -24,6 +24,7 @@ export default function() {
     var connections = [];
     let roomHlsUrl = null;
     let roomSubtitleUrl = null;
+    var roomPlaying = null;
 
     // Add socket.io events
     const messages = [];
@@ -59,7 +60,8 @@ export default function() {
           roomHlsUrl,
           roomSubtitleUrl,
           roomTime: data.time,
-          roomState: data.state
+          roomState: data.state,
+          roomPlaying
         };
         io.to(data.id).emit("setState", state);
       });
@@ -95,6 +97,11 @@ export default function() {
       socket.on("changeSubtitles", url => {
         roomSubtitleUrl = url;
         io.emit("setSubtitles", url);
+      });
+
+      socket.on("nowPlaying", playing => {
+        roomPlaying = playing;
+        io.emit("setNowPlaying", playing);
       });
 
       // On disconnect find and remove user from users array

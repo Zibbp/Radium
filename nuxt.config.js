@@ -5,6 +5,7 @@ export default {
       "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
     BASE_URL: process.env.BASE_URL || "http://localhost:3000",
     ADMIN_TOKEN: process.env.ADMIN_TOKEN,
+    OMDB_API_KEY: process.env.OMDB_API_KEY || "7c3178bf",
     VERSION: process.env.npm_package_version,
     io: {
       // will be available in this.$config.io

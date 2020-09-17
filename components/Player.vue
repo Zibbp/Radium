@@ -1,12 +1,17 @@
 <template>
-  <vue-plyr ref="plyr" class="player" :options="playerOptions">
-    <video poster="/radium_poster.png" crossorigin>
-      <track kind="captions" label="Track 1" :src="subtitleUrl" default />
-    </video>
-  </vue-plyr>
+  <div class="player">
+    <Playing />
+
+    <vue-plyr ref="plyr" class="player" :options="playerOptions">
+      <video poster="/radium_poster.png" crossorigin>
+        <track kind="captions" label="Track 1" :src="subtitleUrl" default />
+      </video>
+    </vue-plyr>
+  </div>
 </template>
 
 <script>
+import Playing from "../components/Playing";
 import Hls from "hls.js";
 export default {
   data() {
@@ -80,6 +85,8 @@ export default {
       if (state.roomState == false) {
         this.player.pause();
       }
+      // Set Now Playing
+      $nuxt.$emit("setPlaying", state.roomPlaying);
     });
     // change HLS stream
     this.$root.mySocket.on("setStream", (url) => {
@@ -147,6 +154,7 @@ export default {
 .player {
   width: 100%;
   height: 100%;
+  position: relative;
 }
 .plyr video {
   height: 100% !important;

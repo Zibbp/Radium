@@ -1,8 +1,10 @@
 <template>
   <div>
     <div class="columns is-desktop is-gapless">
-      <div class="column ">
-        <div class="player-panel"><Player /></div>
+      <div class="column">
+        <div class="player-panel">
+          <Player />
+        </div>
       </div>
       <div
         v-if="this.$store.state.chat"
@@ -20,15 +22,17 @@
           role="alert"
         >
           It appears you are using this site with Firefox. Features may be
-          unstable on Firefox.<br />
-          <b>Known Firefox issues:</b> Subtitles not functioning properly,
-          Periodic frame stutters in the video. <br />
-          If these issues occur, please switch browsers.
+          unstable on Firefox.
+          <br />
+          <b>Known Firefox issues:</b> Subtitles not rendering.
+          <br />If these issues occur, please switch browsers.
         </b-notification>
       </div>
       <div class="columns is-desktop is-gapless">
         <div class="column is-6-desktop is-6-widescreen is-6-fullhd">
-          <div class="under container is-fluid"><AdvancedControls /></div>
+          <div class="under container is-fluid">
+            <AdvancedControls />
+          </div>
         </div>
         <div class="column is-6-desktop is-6-widescreen is-6-fullhd">
           <div class="under container is-fluid">
@@ -95,7 +99,7 @@ const colors = [
   "#4DB380",
   "#FF4D4D",
   "#99E6E6",
-  "#6666FF"
+  "#6666FF",
 ];
 export default {
   data() {
@@ -104,8 +108,8 @@ export default {
       user: {
         username: "",
         color: "",
-        admin: false
-      }
+        admin: false,
+      },
     };
   },
   async mounted() {
@@ -129,23 +133,23 @@ export default {
         type: "is-success",
         message: `Enter a username`,
         inputAttrs: {
-          maxlength: 12
+          maxlength: 12,
         },
         confirmText: "Enter",
         trapFocus: true,
-        onConfirm: value => {
+        onConfirm: (value) => {
           this.user.username = value;
           this.setUser();
         },
-        canCancel: false
+        canCancel: false,
       });
     },
     setUser() {
       this.user.color = colors[Math.floor(Math.random() * colors.length)];
       this.$store.commit("setUser", this.user);
       this.$root.mySocket.emit("newUser", this.user);
-    }
-  }
+    },
+  },
 };
 </script>
 
