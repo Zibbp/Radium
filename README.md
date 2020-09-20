@@ -59,6 +59,11 @@ _If not using a reverse proxy and a domain, the IP and PORT need to be supplied.
 # Add the following environment variable
 -e BASE_URL=https://radium.example.com
 ```
+or
+```bash
+# Add the following environment variable
+-e BASE_URL=http://1.2.3.4:3000
+```
 
 ##### HLS
 
