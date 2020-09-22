@@ -30,10 +30,10 @@ export default {
         sources: [
           {
             src: this.$config.HLS_URL,
-            type: "application/x-mpegURL",
-          },
-        ],
-      },
+            type: "application/x-mpegURL"
+          }
+        ]
+      }
     };
   },
   mounted() {
@@ -48,7 +48,7 @@ export default {
     // If Radium is running in protected mode, add a token to headers for authentication
     if (this.$config.PROTECTED) {
       const token = this.$store.state.token;
-      videojs.Hls.xhr.beforeRequest = function (options) {
+      videojs.Hls.xhr.beforeRequest = function(options) {
         if (options.headers == undefined) {
           options.headers = {};
         }
@@ -70,7 +70,7 @@ export default {
     // Set stream
 
     // Send player state to server for new client
-    this.$root.mySocket.on("requestState", (id) => {
+    this.$root.mySocket.on("requestState", id => {
       var time = this.player.currentTime();
       var state = this.player.paused();
       var id = id;
@@ -79,7 +79,7 @@ export default {
     });
 
     // If new client, set state from server
-    this.$root.mySocket.on("setState", (state) => {
+    this.$root.mySocket.on("setState", state => {
       // Set HLS stream
       if (state.roomHlsUrl) {
         this.player.src(url);
@@ -104,7 +104,7 @@ export default {
               src: state.roomSubtitleUrl,
               srclang: "en",
               label: "custom",
-              default: true,
+              default: true
             },
             true
           );
@@ -129,19 +129,19 @@ export default {
     });
 
     // Change HLS Stream
-    this.$root.mySocket.on("setStream", (url) => {
+    this.$root.mySocket.on("setStream", url => {
       this.player.src(url);
       // Toast notification
       this.$buefy.toast.open({
         duration: 2000,
         message: `Changed HLS Stream`,
         position: "is-bottom",
-        type: "is-success",
+        type: "is-success"
       });
     });
 
     // change subtitles
-    this.$root.mySocket.on("setSubtitles", (url) => {
+    this.$root.mySocket.on("setSubtitles", url => {
       // Remove old subtitles
       setTimeout(() => {
         var oldTracks = this.player.remoteTextTracks();
@@ -160,7 +160,7 @@ export default {
             src: url,
             srclang: "en",
             label: "custom",
-            default: true,
+            default: true
           },
           true
         );
@@ -171,7 +171,7 @@ export default {
         duration: 2000,
         message: `Changed Subtitles`,
         position: "is-bottom",
-        type: "is-success",
+        type: "is-success"
       });
     });
 
@@ -186,7 +186,7 @@ export default {
       this.$buefy.toast.open({
         duration: 500,
         message: `Play`,
-        position: "is-bottom",
+        position: "is-bottom"
       });
     });
 
@@ -196,17 +196,17 @@ export default {
       this.$buefy.toast.open({
         duration: 500,
         message: `Pause`,
-        position: "is-bottom",
+        position: "is-bottom"
       });
     });
 
     // on sendSync from server
-    this.$root.mySocket.on("sendSync", (currentTime) => {
+    this.$root.mySocket.on("sendSync", currentTime => {
       this.player.currentTime(currentTime);
       this.$buefy.toast.open({
         duration: 500,
         message: `Syncing`,
-        position: "is-bottom",
+        position: "is-bottom"
       });
     });
   },
@@ -214,7 +214,7 @@ export default {
     if (this.player) {
       this.player.dispose();
     }
-  },
+  }
 };
 </script>
 
@@ -284,6 +284,10 @@ export default {
   font-size: 1.6em;
   margin-left: -0.5em;
   margin-right: -0.9em;
+}
+
+.vjs-radium-theme .vjs-seek-to-live-control {
+  margin-top: 1.1em !important;
 }
 
 .vjs-radium-theme .vjs-volume-bar {
