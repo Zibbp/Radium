@@ -6,21 +6,21 @@
       </div>
       <div>
         <h2 class="movie__title">
-          <div>{{media.Title}} ({{media.Year}})</div>
-          <div class="movie__rating">{{media.Rated}}</div>
+          <div>{{ media.Title }} ({{ media.Year }})</div>
+          <div class="movie__rating">{{ media.Rated }}</div>
         </h2>
-        <p class="movie__genres">{{media.Genre}}</p>
-        <p class="movie__time">{{media.Runtime}}</p>
+        <p class="movie__genres">{{ media.Genre }}</p>
+        <p class="movie__time">{{ media.Runtime }}</p>
         <div class="movie__stars">
           <p>
             IMDb Rating
-            <i class="fa fa-star fa-fw" aria-hidden="true"></i>
-            {{media.imdbRating}} / 10
+            <b-icon icon="star" size="is-small"></b-icon>
+            {{ media.imdbRating }} / 10
           </p>
 
           <!-- <i class="fa fa-star-o" v-for="n in movieData.score.empty" aria-hidden="true"></i> -->
         </div>
-        <p class="movie__plot">{{media.Plot}}</p>
+        <p class="movie__plot">{{ media.Plot }}</p>
       </div>
     </div>
   </div>
@@ -40,8 +40,8 @@ export default {
         Genre: "VueJS, Javascript, Socket.IO, HLS",
         Plot:
           "Enter the TV Show or Movie below the player, in the advanced controls, to let the room know what's streaming.",
-        imdbRating: "9.3",
-      },
+        imdbRating: "9.3"
+      }
     };
   },
   mounted() {
@@ -49,36 +49,40 @@ export default {
     this.$nuxt.$on("nowplaying", () => {
       this.nowplaying = !this.nowplaying;
     });
-    this.$root.mySocket.on("setNowPlaying", (playing) => {
+    this.$root.mySocket.on("setNowPlaying", playing => {
       this.fetchPlaying(playing);
     });
-    this.$nuxt.$on("setPlaying", (playing) => {
+    // if client joins room late
+    this.$nuxt.$on("setPlaying", playing => {
       this.fetchPlaying(playing);
     });
   },
   methods: {
     async fetchPlaying(playing) {
       try {
-        var res = await this.$axios.get(
-          `https://www.omdbapi.com?apikey=${this.$config.OMDB_API_KEY}&t=${playing}`
-        );
-        if (res.data.Error == "Movie not found!") {
-          $nuxt.$emit("stopLoading");
-          this.$buefy.toast.open({
-            duration: 2000,
-            message: `Can't find ${playing}`,
-            position: "is-bottom",
-            type: "is-danger",
-          });
+        if (playing == null) {
         } else {
-          this.media = res.data;
-          $nuxt.$emit("stopLoading");
-          this.$buefy.toast.open({
-            duration: 2000,
-            message: `Now Playing ${playing}`,
-            position: "is-bottom",
-            type: "is-success",
-          });
+          var res = await this.$axios.get(
+            `https://www.omdbapi.com?apikey=${this.$config.OMDB_API_KEY}&t=${playing}`
+          );
+          if (res.data.Error == "Movie not found!") {
+            $nuxt.$emit("stopLoading");
+            this.$buefy.toast.open({
+              duration: 2000,
+              message: `Can't find ${playing}`,
+              position: "is-bottom",
+              type: "is-danger"
+            });
+          } else {
+            this.media = res.data;
+            $nuxt.$emit("stopLoading");
+            this.$buefy.toast.open({
+              duration: 2000,
+              message: `Now Playing ${playing}`,
+              position: "is-bottom",
+              type: "is-success"
+            });
+          }
         }
       } catch (error) {
         console.log(error);
@@ -87,16 +91,15 @@ export default {
           duration: 2000,
           message: `Error`,
           position: "is-bottom",
-          type: "is-warning",
+          type: "is-warning"
         });
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css?family=Open+Sans");
 .playing {
   position: absolute;
   right: 0;

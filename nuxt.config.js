@@ -2,11 +2,13 @@ export default {
   publicRuntimeConfig: {
     HLS_URL:
       process.env.HLS_URL ||
-      "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+      "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8",
     BASE_URL: process.env.BASE_URL || "http://localhost:3000",
     ADMIN_TOKEN: process.env.ADMIN_TOKEN,
+    API_URL: process.env.API_URL,
     OMDB_API_KEY: process.env.OMDB_API_KEY || "7c3178bf",
     VERSION: process.env.npm_package_version,
+    PROTECTED: process.env.PROTECTED,
     io: {
       // will be available in this.$config.io
       sockets: [
@@ -48,12 +50,12 @@ export default {
   /*
    ** Global CSS
    */
-  css: ["plyr/dist/plyr.css"],
+  css: ["video.js/dist/video-js.css"],
   /*
    ** Plugins to load before mounting the App
    ** https://nuxtjs.org/guide/plugins
    */
-  plugins: ["~/plugins/vue-plyr"],
+  plugins: [],
   /*
    ** Auto import components
    ** See https://nuxtjs.org/api/configuration-components
@@ -62,7 +64,7 @@ export default {
   /*
    ** Nuxt.js dev-modules
    */
-  buildModules: [],
+  buildModules: ["@nuxtjs/dotenv"],
   /*
    ** Nuxt.js modules
    */
