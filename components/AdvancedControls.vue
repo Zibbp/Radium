@@ -22,15 +22,18 @@
               class="link"
               href="https://github.com/zibbp/radium/wiki"
               target="_blank"
-            >documentation</a>
+              >documentation</a
+            >
             for more info.
           </h6>
           <div class="columns is-desktop">
             <!-- SET HLS -->
             <div class="column is-6">
-              <form>
+              <form v-on:submit.prevent>
                 <label class="label has-text-white">Change HLS Stream</label>
-                <p v-if="hlsError" class="help is-danger">Enter a valid HLS Url (ends with .m3u8)</p>
+                <p v-if="hlsError" class="help is-danger">
+                  Enter a valid HLS Url (ends with .m3u8)
+                </p>
                 <p v-else class="help has-text-white">HLS Url (.m3u8)</p>
                 <div class="field is-grouped">
                   <p class="control is-expanded">
@@ -47,19 +50,19 @@
                       class="button is-black"
                       @click.prevent="changeStream"
                       :disabled="!$store.state.user.admin"
-                    >Change</a>
+                      >Change</a
+                    >
                   </p>
                 </div>
               </form>
             </div>
             <!-- SET SUBTITLES -->
             <div class="column is-6">
-              <form>
+              <form v-on:submit.prevent>
                 <label class="label has-text-white">Change Subtitles</label>
-                <p
-                  v-if="subtitleError"
-                  class="help is-danger"
-                >Enter a valid subtitle Url (ends with .vtt)</p>
+                <p v-if="subtitleError" class="help is-danger">
+                  Enter a valid subtitle Url (ends with .vtt)
+                </p>
                 <p v-else class="help has-text-white">Subtitle Url (.vtt)</p>
                 <div class="field is-grouped">
                   <p class="control is-expanded">
@@ -76,7 +79,8 @@
                       class="button is-black"
                       @click.prevent="changeSubtitles"
                       :disabled="!$store.state.user.admin"
-                    >Change</a>
+                      >Change</a
+                    >
                   </p>
                 </div>
               </form>
@@ -85,10 +89,14 @@
           <!-- Change "Now Playing" -->
           <div class="columns is-desktop">
             <div class="column is-6">
-              <form>
+              <form v-on:submit.prevent>
                 <label class="label has-text-white">Now Playing</label>
-                <p v-if="hlsError" class="help is-danger">Enter a Movie or TV Show</p>
-                <p v-else class="help has-text-white">Enter a Movie or TV Show</p>
+                <p v-if="hlsError" class="help is-danger">
+                  Enter a Movie or TV Show
+                </p>
+                <p v-else class="help has-text-white">
+                  Enter a Movie or TV Show
+                </p>
                 <div class="field is-grouped">
                   <p class="control is-expanded">
                     <input
@@ -105,7 +113,8 @@
                       @click.prevent="nowplaying"
                       :disabled="!$store.state.user.admin"
                       :loading="loading"
-                    >Change</b-button>
+                      >Change</b-button
+                    >
                   </p>
                 </div>
               </form>
@@ -128,11 +137,11 @@ export default {
       isOpen: 1,
       collapses: [
         {
-          title: "Advanced Controls",
-        },
+          title: "Advanced Controls"
+        }
       ],
       subtitleUrl: "",
-      subtitleError: false,
+      subtitleError: false
     };
   },
   mounted() {
@@ -175,8 +184,8 @@ export default {
         this.playing = "";
         this.loading = true;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

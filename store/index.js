@@ -1,6 +1,8 @@
 export const state = () => ({
   connected: false,
   chat: true,
+  authorized: false,
+  token: null,
   user: {
     username: null,
     color: null,
@@ -25,5 +27,11 @@ export const mutations = {
   },
   isAdmin(state) {
     state.user.admin = true;
+  },
+  setAuthorized(state) {
+    state.authorized = true;
+  },
+  setToken(state, token) {
+    state.token = token;
   }
 };

@@ -1,33 +1,33 @@
 <template>
   <div>
+    <b-modal
+      v-model="isProtected"
+      has-modal-card
+      trap-focus
+      :destroy-on-hide="false"
+      aria-role="dialog"
+      aria-modal
+    >
+      <template>
+        <h1>yo</h1>
+      </template>
+    </b-modal>
     <div class="columns is-desktop is-gapless">
       <div class="column">
         <div class="player-panel">
-          <Player />
+          <Player v-if="$config.PROTECTED && $store.state.authorized" />
+          <Player v-if="!$config.PROTECTED" />
         </div>
       </div>
       <div
         v-if="this.$store.state.chat"
         class="column is-12-mobile is-12-tablet is-2-desktop is-2-widescreen is-2-fullhd"
       >
-        <Chat />
+        <Chat v-if="$config.PROTECTED && $store.state.authorized" />
+        <Chat v-if="!$config.PROTECTED" />
       </div>
     </div>
     <div class="under-panel">
-      <div v-if="firefox" class="container">
-        <b-notification
-          type="is-warning"
-          has-icon
-          aria-close-label="Close notification"
-          role="alert"
-        >
-          It appears you are using this site with Firefox. Features may be
-          unstable on Firefox.
-          <br />
-          <b>Known Firefox issues:</b> Subtitles not rendering.
-          <br />If these issues occur, please switch browsers.
-        </b-notification>
-      </div>
       <div class="columns is-desktop is-gapless">
         <div class="column is-6-desktop is-6-widescreen is-6-fullhd">
           <div class="under container is-fluid">
@@ -49,6 +49,7 @@ import Player from "../components/Player";
 import Chat from "../components/Chat";
 import AdvancedControls from "../components/AdvancedControls";
 import Users from "../components/Users";
+import Login from "../components/Login";
 const colors = [
   "#FF6633",
   "#FFB399",
@@ -102,9 +103,12 @@ const colors = [
   "#6666FF",
 ];
 export default {
+  components: {
+    Login,
+  },
   data() {
     return {
-      firefox: null,
+      isProtected: true,
       user: {
         username: "",
         color: "",
@@ -113,9 +117,13 @@ export default {
     };
   },
   async mounted() {
-    this.firefox = typeof InstallTrigger !== "undefined";
     if (!this.$store.state.connected) {
-      this.prompt();
+      // if protected mode running
+      if (this.$config.PROTECTED) {
+        this.protectedModal();
+      } else {
+        this.prompt();
+      }
     }
     const emotes = await this.$axios.get(
       `${this.$config.BASE_URL}/api/emotes/list`
@@ -141,6 +149,15 @@ export default {
           this.user.username = value;
           this.setUser();
         },
+        canCancel: false,
+      });
+    },
+    protectedModal() {
+      this.$buefy.modal.open({
+        parent: this,
+        component: Login,
+        hasModalCard: true,
+        trapFocus: true,
         canCancel: false,
       });
     },
@@ -183,8 +200,5 @@ export default {
   background-color: hsl(0, 0%, 21%);
   border-top: 0;
   color: #d3d3d3;
-}
-.firefox {
-  padding-top: 2rem;
 }
 </style>
