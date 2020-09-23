@@ -15,16 +15,16 @@
     <div class="columns is-desktop is-gapless">
       <div class="column">
         <div class="player-panel">
-          <Player v-if="$config.PROTECTED && $store.state.authorized" />
-          <Player v-if="!$config.PROTECTED" />
+          <Player v-if="$config.PROTECT && $store.state.authorized" />
+          <Player v-if="!$config.PROTECT" />
         </div>
       </div>
       <div
         v-if="this.$store.state.chat"
         class="column is-12-mobile is-12-tablet is-2-desktop is-2-widescreen is-2-fullhd"
       >
-        <Chat v-if="$config.PROTECTED && $store.state.authorized" />
-        <Chat v-if="!$config.PROTECTED" />
+        <Chat v-if="$config.PROTECT && $store.state.authorized" />
+        <Chat v-if="!$config.PROTECT" />
       </div>
     </div>
     <div class="under-panel">
