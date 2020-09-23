@@ -46,7 +46,7 @@ export default {
       }
     );
     // If Radium is running in protected mode, add a token to headers for authentication
-    if (this.$config.PROTECTED) {
+    if (this.$config.PROTECT) {
       const token = this.$store.state.token;
       videojs.Hls.xhr.beforeRequest = function(options) {
         if (options.headers == undefined) {
