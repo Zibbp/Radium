@@ -8,7 +8,7 @@ export default {
     API_URL: process.env.API_URL,
     OMDB_API_KEY: process.env.OMDB_API_KEY || "7c3178bf",
     VERSION: process.env.npm_package_version,
-    PROTECTED: process.env.PROTECTED,
+    PROTECT: process.env.PROTECTED,
     io: {
       // will be available in this.$config.io
       sockets: [

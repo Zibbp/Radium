@@ -100,11 +100,11 @@ const colors = [
   "#4DB380",
   "#FF4D4D",
   "#99E6E6",
-  "#6666FF",
+  "#6666FF"
 ];
 export default {
   components: {
-    Login,
+    Login
   },
   data() {
     return {
@@ -112,14 +112,14 @@ export default {
       user: {
         username: "",
         color: "",
-        admin: false,
-      },
+        admin: false
+      }
     };
   },
   async mounted() {
     if (!this.$store.state.connected) {
       // if protected mode running
-      if (this.$config.PROTECTED) {
+      if (this.$config.PROTECT) {
         this.protectedModal();
       } else {
         this.prompt();
@@ -141,15 +141,15 @@ export default {
         type: "is-success",
         message: `Enter a username`,
         inputAttrs: {
-          maxlength: 12,
+          maxlength: 12
         },
         confirmText: "Enter",
         trapFocus: true,
-        onConfirm: (value) => {
+        onConfirm: value => {
           this.user.username = value;
           this.setUser();
         },
-        canCancel: false,
+        canCancel: false
       });
     },
     protectedModal() {
@@ -158,15 +158,15 @@ export default {
         component: Login,
         hasModalCard: true,
         trapFocus: true,
-        canCancel: false,
+        canCancel: false
       });
     },
     setUser() {
       this.user.color = colors[Math.floor(Math.random() * colors.length)];
       this.$store.commit("setUser", this.user);
       this.$root.mySocket.emit("newUser", this.user);
-    },
-  },
+    }
+  }
 };
 </script>
 
