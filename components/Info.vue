@@ -40,13 +40,6 @@
           >
             <b-icon icon="github"></b-icon>
           </a>
-          <a
-            class="button is-dark is-small"
-            href="https://zibbp.tech"
-            target="_blank"
-          >
-            <b-icon icon="web"></b-icon>
-          </a>
         </div>
       </div>
     </div>
