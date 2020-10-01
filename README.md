@@ -111,3 +111,7 @@ The admin token is automatically generated and logged to the console whenever st
 
 > [zibbp.tech](https://zibbp.tech) &nbsp;&middot;&nbsp;
 > GitHub [@zibbp](https://github.com/zibbp) &nbsp;&middot;&nbsp;
+
+## License
+
+Radium is distributed under the terms of the MIT license. See LICENSE.md for details.
