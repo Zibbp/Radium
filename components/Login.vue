@@ -2,7 +2,7 @@
   <form v-on:submit.prevent>
     <div class="modal-card" style="width: auto">
       <header class="modal-card-head">
-        <p class="modal-card-title">Radium Protected 🔒</p>
+        <p class="modal-card-title">Radium Protect 🔒</p>
       </header>
       <section class="modal-card-body">
         <b-field class="has-text-white" label="Username">
@@ -82,25 +82,24 @@ const colors = [
   "#4DB380",
   "#FF4D4D",
   "#99E6E6",
-  "#6666FF"
+  "#6666FF",
 ];
 
 export default {
   data() {
     return {
       username: "",
-      password: ""
+      password: "",
     };
   },
   methods: {
     async login() {
       if (this.username == "" || this.password == "") {
       } else {
-        // TODO: DYNAMIC URL
         try {
           var res = await this.$axios.post(`${this.$config.API_URL}/login`, {
             username: this.username,
-            password: this.password
+            password: this.password,
           });
 
           // TODO: GET AND SET TOKEN / USERNAME
@@ -110,7 +109,7 @@ export default {
             duration: 3000,
             message: `Welcome ${this.username}`,
             position: "is-bottom",
-            type: "is-info"
+            type: "is-info",
           });
 
           // set user
@@ -118,7 +117,7 @@ export default {
           const user = {
             username: this.username,
             color: color,
-            admin: false
+            admin: false,
           };
           this.$store.commit("setUser", user);
           this.$store.commit("setAuthorized");
@@ -134,13 +133,13 @@ export default {
               duration: 3000,
               message: `Invalid Credentials`,
               position: "is-bottom",
-              type: "is-danger"
+              type: "is-danger",
             });
           }
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

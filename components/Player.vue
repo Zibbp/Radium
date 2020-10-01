@@ -30,10 +30,10 @@ export default {
         sources: [
           {
             src: this.$config.HLS_URL,
-            type: "application/x-mpegURL"
-          }
-        ]
-      }
+            type: "application/x-mpegURL",
+          },
+        ],
+      },
     };
   },
   mounted() {
@@ -48,7 +48,7 @@ export default {
     // If Radium is running in protected mode, add a token to headers for authentication
     if (this.$config.PROTECT) {
       const token = this.$store.state.token;
-      videojs.Hls.xhr.beforeRequest = function(options) {
+      videojs.Hls.xhr.beforeRequest = function (options) {
         if (options.headers == undefined) {
           options.headers = {};
         }
@@ -58,19 +58,12 @@ export default {
       };
     }
 
-    // Set player volume to 25% as videojs doesn't keep volume data
+    // Set player volume to 25% as videojs volume isn't persisted
+    // maybe add that in the future
     this.player.volume(0.25);
-    // Get bandwidth stats every second
-    // this.$nextTick(function() {
-    //   window.setInterval(() => {
-    //     // var b = this.player.vhs.bandwidth / 8000000;
-    //     console.log(this.player.paused());
-    //   }, 1000);
-    // });
-    // Set stream
 
     // Send player state to server for new client
-    this.$root.mySocket.on("requestState", id => {
+    this.$root.mySocket.on("requestState", (id) => {
       var time = this.player.currentTime();
       var state = this.player.paused();
       var id = id;
@@ -79,7 +72,7 @@ export default {
     });
 
     // If new client, set state from server
-    this.$root.mySocket.on("setState", state => {
+    this.$root.mySocket.on("setState", (state) => {
       // Set HLS stream
       if (state.roomHlsUrl) {
         this.player.src(url);
@@ -104,7 +97,7 @@ export default {
               src: state.roomSubtitleUrl,
               srclang: "en",
               label: "custom",
-              default: true
+              default: true,
             },
             true
           );
@@ -129,19 +122,19 @@ export default {
     });
 
     // Change HLS Stream
-    this.$root.mySocket.on("setStream", url => {
+    this.$root.mySocket.on("setStream", (url) => {
       this.player.src(url);
       // Toast notification
       this.$buefy.toast.open({
         duration: 2000,
         message: `Changed HLS Stream`,
         position: "is-bottom",
-        type: "is-success"
+        type: "is-success",
       });
     });
 
     // change subtitles
-    this.$root.mySocket.on("setSubtitles", url => {
+    this.$root.mySocket.on("setSubtitles", (url) => {
       // Remove old subtitles
       setTimeout(() => {
         var oldTracks = this.player.remoteTextTracks();
@@ -160,7 +153,7 @@ export default {
             src: url,
             srclang: "en",
             label: "custom",
-            default: true
+            default: true,
           },
           true
         );
@@ -171,7 +164,7 @@ export default {
         duration: 2000,
         message: `Changed Subtitles`,
         position: "is-bottom",
-        type: "is-success"
+        type: "is-success",
       });
     });
 
@@ -186,7 +179,7 @@ export default {
       this.$buefy.toast.open({
         duration: 500,
         message: `Play`,
-        position: "is-bottom"
+        position: "is-bottom",
       });
     });
 
@@ -196,17 +189,17 @@ export default {
       this.$buefy.toast.open({
         duration: 500,
         message: `Pause`,
-        position: "is-bottom"
+        position: "is-bottom",
       });
     });
 
     // on sendSync from server
-    this.$root.mySocket.on("sendSync", currentTime => {
+    this.$root.mySocket.on("sendSync", (currentTime) => {
       this.player.currentTime(currentTime);
       this.$buefy.toast.open({
         duration: 500,
         message: `Syncing`,
-        position: "is-bottom"
+        position: "is-bottom",
       });
     });
   },
@@ -214,7 +207,7 @@ export default {
     if (this.player) {
       this.player.dispose();
     }
-  }
+  },
 };
 </script>
 
@@ -292,6 +285,10 @@ export default {
 
 .vjs-radium-theme .vjs-volume-bar {
   margin: 1.5em 0.45em;
+}
+
+.video-js .vjs-volume-level {
+  background-color: var(--vjs-radium-theme--primary);
 }
 
 .vjs-theme-city

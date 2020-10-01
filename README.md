@@ -5,7 +5,6 @@
 </h1>
 
 <h4 align="center">🖥️<a href="https://radium-demo.herokuapp.com" target="_blank">Demo</a><i> may take a minute to wake app</i></h4>
-<h5 align="center">🚨 Radium is known to have issues with Firefox such as video frame stutters and subtitles not working</h5>
 
 <p align="center">
   Radium<a href="https://github.com/Zibbp/Radium">
@@ -59,7 +58,9 @@ _If not using a reverse proxy and a domain, the IP and PORT need to be supplied.
 # Add the following environment variable
 -e BASE_URL=https://radium.example.com
 ```
+
 or
+
 ```bash
 # Add the following environment variable
 -e BASE_URL=http://1.2.3.4:3000
