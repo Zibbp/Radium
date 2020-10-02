@@ -97,10 +97,13 @@ export default {
       if (this.username == "" || this.password == "") {
       } else {
         try {
-          var res = await this.$axios.post(`${this.$config.API_URL}/login`, {
-            username: this.username,
-            password: this.password,
-          });
+          var res = await this.$axios.post(
+            `${this.$config.API_URL}/api/v1/auth/login`,
+            {
+              username: this.username,
+              password: this.password,
+            }
+          );
 
           // TODO: GET AND SET TOKEN / USERNAME
           this.$store.commit("setToken", res.data.token);
