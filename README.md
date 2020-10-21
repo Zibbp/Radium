@@ -14,7 +14,9 @@
   Nginx-RTMP-HLS <a href="https://github.com/Zibbp/Nginx-RTMP-HLS"><img src="https://github.com/Zibbp/Nginx-RTMP-HLS/workflows/Build/badge.svg"></a>
 </p>
 
-![screenshot](https://i.imgur.com/I4yOWND.jpg)
+![screenshot](https://i.imgur.com/lHmxc6m.png)
+Advanced Controls found below the player
+![screenshot_ac](https://i.imgur.com/vHE50aH.png)
 
 ## Features
 
@@ -29,6 +31,8 @@
   - No login, simply enter a displayname
   - Custom emotes from images
   - Admin authentication\*
+- Now Playing
+  - Set what is being played [more info](https://github.com/Zibbp/Radium/wiki/Now-Playing---OMDb-API)
 - More coming soon!
 
 \*Only Admins are able to sync the room
@@ -115,4 +119,4 @@ The admin token is automatically generated and logged to the console whenever st
 
 ## License
 
-Radium is distributed under the terms of the MIT license. See LICENSE.md for details.
+Radium is distributed under the terms of the MIT license. See [LICENSE.md](https://github.com/Zibbp/Radium/blob/master/LICENSE) for details.
