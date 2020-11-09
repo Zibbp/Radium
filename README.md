@@ -50,6 +50,10 @@ $ docker run -d --name=radium -p 3000:3000 -e BASE_URL=https://radium.example.co
 
 **Prefer using docker compose? Check out the [`docker-compose.yml`](https://github.com/Zibbp/Radium/blob/master/docker-compose.yml)**
 
+Want to use Heroku? Click the button, enter environment variables, and click deploy!
+
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
 ### Options
 
 ##### Base URL _(REQUIRED)_
