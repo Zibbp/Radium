@@ -1,0 +1,27 @@
+{
+    "name": "Radium",
+    "description": "Synced stream and video playback with VOD capabilities utilizing HLS. Developed for movie nights but has many use cases.",
+    "repository": "https://github.com/Zibbp/Radium",
+    "logo": "https://raw.githubusercontent.com/Zibbp/Radium/master/static/android-chrome-512x512.png",
+    "keywords": ["node", "vue", "stream", "hls", "movie", "sync", "watch"],
+    "image": "heroku/nodejs",
+    "env": {
+      "BASE_URL": {
+        "description": "URL of the application - For Heroku it will be: https://APP-NAME.herokuapp.com   Replace APP-NAME with the name entered above.",
+        "required": true
+      },
+      "HLS_URL": {
+        "description": "HLS Stream URL (OPTIONAL - Can be changed in the app).",
+        "required": false
+      },
+      "ADMIN_TOKEN": {
+        "description": "Enter an admin token for authentication or leave blank for a generated one found in the server logs (OPTIONAL).",
+        "required": false
+      },
+      "OMDB_API_KEY": {
+        "description": "OMDB API Key for resolving the Now Playing feature (OPTIONAL).",
+        "required": false
+      }
+    }
+  }
+  
