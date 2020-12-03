@@ -14,7 +14,7 @@
 
 <script>
 import Playing from "../components/Playing";
-import videojs from "video.js";
+import videojs, { log } from "video.js";
 require("videojs-hls-quality-selector");
 require("videojs-contrib-quality-levels");
 
@@ -30,10 +30,10 @@ export default {
         sources: [
           {
             src: this.$config.HLS_URL,
-            type: "application/x-mpegURL",
-          },
-        ],
-      },
+            type: "application/x-mpegURL"
+          }
+        ]
+      }
     };
   },
   mounted() {
@@ -48,7 +48,7 @@ export default {
     // If Radium is running in protected mode, add a token to headers for authentication
     if (this.$config.PROTECT) {
       const token = this.$store.state.token;
-      videojs.Hls.xhr.beforeRequest = function (options) {
+      videojs.Hls.xhr.beforeRequest = function(options) {
         if (options.headers == undefined) {
           options.headers = {};
         }
@@ -63,7 +63,7 @@ export default {
     this.player.volume(0.25);
 
     // Send player state to server for new client
-    this.$root.mySocket.on("requestState", (id) => {
+    this.$root.mySocket.on("requestState", id => {
       var time = this.player.currentTime();
       var state = this.player.paused();
       var id = id;
@@ -72,10 +72,11 @@ export default {
     });
 
     // If new client, set state from server
-    this.$root.mySocket.on("setState", (state) => {
+    this.$root.mySocket.on("setState", state => {
       // Set HLS stream
+      console.log(state);
       if (state.roomHlsUrl) {
-        this.player.src(url);
+        this.player.src(state.roomHlsUrl);
       }
       // Set subtitles
       if (state.roomSubtitleUrl) {
@@ -97,7 +98,7 @@ export default {
               src: state.roomSubtitleUrl,
               srclang: "en",
               label: "custom",
-              default: true,
+              default: true
             },
             true
           );
@@ -122,19 +123,19 @@ export default {
     });
 
     // Change HLS Stream
-    this.$root.mySocket.on("setStream", (url) => {
+    this.$root.mySocket.on("setStream", url => {
       this.player.src(url);
       // Toast notification
       this.$buefy.toast.open({
         duration: 2000,
         message: `Changed HLS Stream`,
         position: "is-bottom",
-        type: "is-success",
+        type: "is-success"
       });
     });
 
     // change subtitles
-    this.$root.mySocket.on("setSubtitles", (url) => {
+    this.$root.mySocket.on("setSubtitles", url => {
       // Remove old subtitles
       setTimeout(() => {
         var oldTracks = this.player.remoteTextTracks();
@@ -153,7 +154,7 @@ export default {
             src: url,
             srclang: "en",
             label: "custom",
-            default: true,
+            default: true
           },
           true
         );
@@ -164,7 +165,7 @@ export default {
         duration: 2000,
         message: `Changed Subtitles`,
         position: "is-bottom",
-        type: "is-success",
+        type: "is-success"
       });
     });
 
@@ -179,7 +180,7 @@ export default {
       this.$buefy.toast.open({
         duration: 500,
         message: `Play`,
-        position: "is-bottom",
+        position: "is-bottom"
       });
     });
 
@@ -189,17 +190,17 @@ export default {
       this.$buefy.toast.open({
         duration: 500,
         message: `Pause`,
-        position: "is-bottom",
+        position: "is-bottom"
       });
     });
 
     // on sendSync from server
-    this.$root.mySocket.on("sendSync", (currentTime) => {
+    this.$root.mySocket.on("sendSync", currentTime => {
       this.player.currentTime(currentTime);
       this.$buefy.toast.open({
         duration: 500,
         message: `Syncing`,
-        position: "is-bottom",
+        position: "is-bottom"
       });
     });
   },
@@ -207,7 +208,7 @@ export default {
     if (this.player) {
       this.player.dispose();
     }
-  },
+  }
 };
 </script>
 
