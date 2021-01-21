@@ -16,7 +16,7 @@
     "nuxt": "^2.14.0",
     "nuxt-buefy": "^0.3.31",
     "nuxt-socket-io": "^1.1.6",
-    "socket.io": "^2.3.0",
+    "socket.io": "^2.4.0",
     "video.js": "^7.8.4",
     "videojs-contrib-quality-levels": "^2.0.9",
     "videojs-hls-quality-selector": "^1.1.1"
