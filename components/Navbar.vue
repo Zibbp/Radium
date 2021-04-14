@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-navbar type="is-dark" class="radium-navbar">
+    <b-navbar type="is-dark" class="ipllive-navbar">
       <template slot="brand">
         <b-navbar-item tag="router-link" :to="{ path: '/' }">
           <img src="/logo.png" alt="Radium" />
