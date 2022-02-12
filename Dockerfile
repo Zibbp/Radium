@@ -4,7 +4,7 @@ ENV NUXT_VERSION=2.15.18
 
 WORKDIR /app
 
-ADD frontend ./
+ADD . ./
 RUN : \
   && yarn install \
   && yarn build --standalone \
