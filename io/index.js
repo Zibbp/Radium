@@ -86,7 +86,6 @@ export default function async() {
       }
     };
     await fetchEmotes();
-    console.log(emotes);
 
     io.on("connection", (socket) => {
       connections.push(socket);

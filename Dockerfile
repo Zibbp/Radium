@@ -1,18 +1,23 @@
 FROM node:16-alpine
 
-ENV NUXT_VERSION=2.15.18
+# create destination directory
+WORKDIR /opt/app
 
-WORKDIR /app
+COPY package.json package-lock.json* ./
 
-ADD . ./
-RUN : \
-  && yarn install \
-  && yarn build --standalone \
-  && rm -rf node_modules \
-  && rm package.json \
-  && yarn add "nuxt-start@${NUXT_VERSION}" \
-  && yarn cache clean \
-  && :
+# copy the app, note .dockerignore
+RUN npm install
 
-ENTRYPOINT ["npx", "nuxt-start"]
+COPY . /opt/app
+
+# build
+RUN npm run build
+
+# expose 3000 on container
 EXPOSE 3000
+
+ENV NUXT_HOST=0.0.0.0
+ENV NUXT_PORT=3000
+
+# start the app
+CMD [ "npm", "start" ]
