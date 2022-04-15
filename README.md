@@ -4,6 +4,10 @@
   <br>
 </h1>
 
+## Radium Next
+
+[Radium Next](https://github.com/Zibbp/Radium/tree/next) is a sub-second streaming version of Radium using [OvenMediaEngine](https://github.com/AirenSoft/OvenMediaEngine). Visit the [branch](https://github.com/Zibbp/Radium/tree/next) for more information.
+
 <h4 align="center">🖥️<a href="https://radium-demo.herokuapp.com" target="_blank">Demo</a><i> may take a minute to wake app</i></h4>
 
 <p align="center">
