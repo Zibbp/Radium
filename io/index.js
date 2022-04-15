@@ -27,7 +27,7 @@ export default function async() {
     const connections = [];
     const messages = [];
     const sources = [];
-    const emotes = [];
+    let emotes = [];
 
     if (
       config.default.publicRuntimeConfig.initialSourceType.length > 1 &&
@@ -44,22 +44,35 @@ export default function async() {
     const fetchEmotes = async () => {
       // BTTV
       console.log("Fetching BTTV emotes...");
-      const bttvEmotes = await axios.get(
-        "https://api.betterttv.net/3/emotes/shared/top?offset=0&limit=100"
-      );
-      // Format BTTV emotes
-      for await (const emote of bttvEmotes.data) {
-        const newEmoteObject = {
-          id: emote.emote.id,
-          code: emote.emote.code,
-          source: "bttv",
-        };
-        emotes.push(newEmoteObject);
+      try {
+        //  Fetch top 200 bttv emotes
+        const bttvEmotesArr = []
+        const bttvEmotes1 = await axios.get(
+          "https://api.betterttv.net/3/emotes/shared/top?offset=0&limit=100"
+        );
+        const bttvEmotes2 = await axios.get("https://api.betterttv.net/3/emotes/shared/top?offset=100&limit=100")
+        for await (const emote of bttvEmotes1.data) {
+          bttvEmotesArr.push(emote)
+        }
+        for await (const emote of bttvEmotes2.data) {
+          bttvEmotesArr.push(emote)
+        }
+        // Format BTTV emotes
+        for await (const emote of bttvEmotesArr) {
+          const newEmoteObject = {
+            id: emote.emote.id,
+            code: emote.emote.code,
+            source: "bttv",
+          };
+          emotes.push(newEmoteObject);
+        }
+      } catch (error) {
+        console.log('Error fetching BTTV emotes: ', error);
       }
       // FFZ
       console.log("Fetching FFZ emotes...");
       const ffzEmotes = await axios.get(
-        "https://api.frankerfacez.com/v1/emotes?q=&sort=count-desc&per_page=100"
+        "https://api.frankerfacez.com/v1/emotes?q=&sort=count-desc&per_page=200"
       );
       // Format BTTV emotes
       for await (const emote of ffzEmotes.data.emoticons) {
