@@ -1,0 +1,11 @@
+version: "3.3"
+services:
+  radium:
+    container_name: radium
+    ports:
+      - "3000:3000"
+    environment:
+      - "BASE_URL=https://radium.domain.com"
+      - INITIAL_SOURCE_TYPE=webrtc
+      - INITIAL_SOURCE_URL=wss://webrtc.radium.domain.com/my/stream/here
+    image: ghcr.io/zibbp/radium:next
