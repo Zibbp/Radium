@@ -12,8 +12,13 @@ export default {
       player: null,
       options: {
         volume: 25,
-        autoStart: false,
+        autoStart: true,
+        mute: false,
         sources: [],
+        webrtcConfig: {
+          timeoutMaxRetry: 4,
+          connectionTimeout: 10000,
+        },
       },
     };
   },
