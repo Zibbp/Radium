@@ -6,6 +6,7 @@
 
 <script>
 import Vue from "vue";
+import Hls from "hls.js";
 export default {
   data() {
     return {
@@ -23,6 +24,7 @@ export default {
     };
   },
   async mounted() {
+    window.Hls = Hls;
     this.$root.mainSocket.on("sourcesList", (sources) => {
       this.options.sources = sources;
       this.player.load(this.options);
