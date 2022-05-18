@@ -124,9 +124,7 @@ export default function async() {
       });
 
       socket.on("removePlayerSource", (index) => {
-        console.log("before slice", sources);
         sources.splice(index, 1);
-        console.log("after slice", sources);
         io.emit("sourcesList", sources);
       });
 
