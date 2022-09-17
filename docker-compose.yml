@@ -1,11 +1,35 @@
 version: "3.3"
 services:
+
+  traefik:
+    image: 'traefik:2.3'
+    container_name: 'traefik'
+    restart: 'unless-stopped'
+    ports:
+      - '80:80'
+      - '443:443'
+      - '8080:8080'
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+      - './traefik.toml:/traefik.toml'
+
   radium:
     container_name: radium
-    ports:
-      - "3000:3000"
     environment:
-      - "BASE_URL=https://radium.example.com"
-      #  - 'HLS_URL=https://domain.com/stream.m3u8'
+      - "BASE_URL=http://watch.localhost"
+#     - 'HLS_URL=http://127.0.0.1:3000/stream.m3u8'
       #  - ADMIN_TOKEN=secret123
     image: ghcr.io/zibbp/radium:latest
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.radium.rule=Host(`watch.localhost`)'
+      - 'traefik.http.routers.radium.entrypoints=web'
+
+  whoami:
+    container_name: whoami
+    image: "traefik/whoami" #ghcr.io/zibbp/radium:latest
+    restart: 'unless-stopped'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.whoami.rule=Host(`who.localhost`)'
+      - 'traefik.http.routers.whoami.entrypoints=web'
