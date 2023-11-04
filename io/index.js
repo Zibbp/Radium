@@ -83,20 +83,6 @@ export default function async() {
         };
         emotes.push(newEmoteObject);
       }
-      // 7TV
-      console.log("Fetching 7TV emotes...");
-      const sevenTvEmotes = await axios.get(
-        "https://api.7tv.app/v2/emotes/global"
-      );
-      // Format BTTV emotes
-      for await (const emote of sevenTvEmotes.data) {
-        const newEmoteObject = {
-          id: emote.id,
-          code: emote.name,
-          source: "7tv",
-        };
-        emotes.push(newEmoteObject);
-      }
     };
     await fetchEmotes();
 
